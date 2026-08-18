@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="src/DirectoryService.Application/DirectoryService.Application.csproj" Id="82efc790-1aee-4555-956a-d664c887f329" />
+  <Project Path="src/DirectoryService.Contracts/DirectoryService.Contracts.csproj" Id="a23c0496-7179-4260-91a0-c1ff6c4994f4" />
+  <Project Path="src/DirectoryService.Domain/DirectoryService.Domain.csproj" Id="67005b1a-f664-4e69-b961-bfdc8a1cf7da" />
+  <Project Path="src/DirectoryService.Infrastructure.Postgres/DirectoryService.Infrastructure.Postgres.csproj" Id="f2a2514f-35e7-46c5-aef6-262fa39982b1" />
+  <Project Path="src/DirectoryService.Presentation/DirectoryService.Presentation.csproj" Id="d8386774-2eeb-4ab0-a415-dc15d949ea44" />
+</Solution>
