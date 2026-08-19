@@ -1,4 +1,9 @@
 <Solution>
+  <Folder Name="/Элементы решения/">
+    <File Path="../.globalconfig" />
+    <File Path="../Directory.Build.props" />
+    <File Path="../Directory.Packages.props" />
+  </Folder>
   <Project Path="src/DirectoryService.Application/DirectoryService.Application.csproj" Id="82efc790-1aee-4555-956a-d664c887f329" />
   <Project Path="src/DirectoryService.Contracts/DirectoryService.Contracts.csproj" Id="a23c0496-7179-4260-91a0-c1ff6c4994f4" />
   <Project Path="src/DirectoryService.Domain/DirectoryService.Domain.csproj" Id="67005b1a-f664-4e69-b961-bfdc8a1cf7da" />
