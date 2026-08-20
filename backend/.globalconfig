@@ -47,3 +47,4 @@ dotnet_diagnostic.S108.severity  = error  # Пустой catch-блок без �
 dotnet_diagnostic.CS4014.severity = none
 dotnet_diagnostic.MA0042.severity = none
 dotnet_diagnostic.S6966.severity = none
+dotnet_diagnostic.MA0009.severity = none
