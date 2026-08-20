@@ -10,7 +10,7 @@ public sealed class Position
     {
         Id = Guid.CreateVersion7();
         Name = PositionName.Create(name);
-        CreatedAt = DateTime.Now;
+        CreatedAt = DateTime.UtcNow;
         _departments = departments.ToList();
     }
 

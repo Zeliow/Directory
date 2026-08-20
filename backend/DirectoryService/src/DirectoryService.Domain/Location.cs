@@ -11,7 +11,7 @@ public sealed class Location
         Id = Guid.CreateVersion7();
         Name = LocationName.Create(name);
         Address = Address.Create(address);
-        CreatedAt = DateTime.Now;
+        CreatedAt = DateTime.UtcNow;
         _departments = departments.ToList();
     }
 

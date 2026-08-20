@@ -13,7 +13,7 @@ public sealed record Slug
     {
         if (string.IsNullOrWhiteSpace(value) || !Regex.IsMatch(value, "^[a-z0-9-]+$"))
         {
-            throw new ArgumentException("Department slug cannot be empty or use digits", nameof(value));
+            throw new ArgumentException("Slug должен содержать только строчные буквы, цифры и дефисы.", nameof(value));
         }
         return new Slug(value);
     }

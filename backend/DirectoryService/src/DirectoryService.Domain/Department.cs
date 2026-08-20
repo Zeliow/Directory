@@ -20,7 +20,7 @@ public sealed class Department
         Slug = slug;
         ParentId = parentId;
         Path = departmentPath;
-        CreatedAt = DateTime.Now;
+        CreatedAt = DateTime.UtcNow;
         _locations = locations.ToList();
         _positions = positions.ToList();
     }

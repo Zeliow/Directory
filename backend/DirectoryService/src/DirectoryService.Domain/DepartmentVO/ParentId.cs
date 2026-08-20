@@ -9,10 +9,6 @@ public sealed record ParentId
     }
     public static ParentId Create(Guid? value)
     {
-        if (value == Guid.Empty)
-        {
-            return new ParentId(Guid.Empty);
-        }
         return new ParentId(value);
     }
 }
