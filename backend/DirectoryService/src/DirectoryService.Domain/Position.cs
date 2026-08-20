@@ -6,12 +6,11 @@ public sealed class Position
     {
     }
 
-    public Position(string name, DateTime createdAt, DateTime updateAt, IEnumerable<Department> departments)
+    public Position(string name, IEnumerable<Department> departments)
     {
         Id = Guid.CreateVersion7();
         Name = PositionName.Create(name);
-        CreatedAt = createdAt;
-        UpdateAt = updateAt;
+        CreatedAt = DateTime.Now;
         _departments = departments.ToList();
     }
 

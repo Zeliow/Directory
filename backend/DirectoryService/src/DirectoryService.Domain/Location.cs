@@ -6,13 +6,12 @@ public sealed class Location
     {
     }
 
-    public Location(string name, string address, DateTime createdAt, DateTime updatedAt, IEnumerable<Department> departments)
+    public Location(string name, string address, IEnumerable<Department> departments)
     {
         Id = Guid.CreateVersion7();
         Name = LocationName.Create(name);
         Address = Address.Create(address);
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
+        CreatedAt = DateTime.Now;
         _departments = departments.ToList();
     }
 

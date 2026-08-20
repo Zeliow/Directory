@@ -1,4 +1,6 @@
-﻿namespace DirectoryService.Domain;
+﻿using DirectoryService.Domain.DepartmentVO;
+
+namespace DirectoryService.Domain;
 
 public sealed class Department
 {
@@ -6,22 +8,19 @@ public sealed class Department
     {
     }
 
-    public Department(string name,
-                      string path,
-                      string slug,
-                      Guid? parentId,
-                      DateTime createdAt,
-                      DateTime updatedAt,
+    private Department(DepartmentName name,
+                      Slug slug,
+                      ParentId parentId,
+                      DepartmentPath departmentPath,
                       IEnumerable<Location> locations,
                       IEnumerable<Position> positions)
     {
         Id = Guid.CreateVersion7();
-        Name = DepartmentName.Create(name);
-        Path = Path.Create(path);
-        Slug = Slug.Create(slug);
-        ParentId = parentId.HasValue ? ParentId.Create(parentId.Value) : null;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
+        Name = name;
+        Slug = slug;
+        ParentId = parentId;
+        Path = departmentPath;
+        CreatedAt = DateTime.Now;
         _locations = locations.ToList();
         _positions = positions.ToList();
     }
@@ -30,79 +29,22 @@ public sealed class Department
     private readonly List<Position> _positions = [];
     public Guid Id { get; private set; }
     public DepartmentName Name { get; private set; } = DepartmentName.Create(string.Empty);
-    public Path Path { get; private set; } = Path.Create(string.Empty);
+    public DepartmentPath? Path { get; private set; }
     public Slug Slug { get; private set; } = Slug.Create(string.Empty);
-    public ParentId? ParentId { get; private set; } = ParentId.Create(Guid.Empty);
+    public ParentId ParentId { get; private set; } = ParentId.Create(null);
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public IReadOnlyList<Location> Locations => _locations;
     public IReadOnlyList<Position> Positions => _positions;
-}
 
-public sealed record DepartmentName
-{
-    public string Value { get; }
-    private DepartmentName(string value)
+    public static Department Create(string name, string slug, string? parentPath, Guid? parentId, IEnumerable<Location> locations, IEnumerable<Position> positions)
     {
-        Value = value;
-    }
-    public static DepartmentName Create(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ArgumentException("Department name cannot be empty.", nameof(value));
-        }
-        return new DepartmentName(value);
-    }
-}
+        var departmentName = DepartmentName.Create(name);
+        var departmentSlug = Slug.Create(slug);
+        var parentIdValue = ParentId.Create(parentId);
 
-public sealed record Path
-{
-    public string Value { get; }
-    private Path(string value)
-    {
-        Value = value;
-    }
-    public static Path Create(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ArgumentException("Department path cannot be empty.", nameof(value));
-        }
-        return new Path(value);
-    }
-}
+        var departmentPath = DepartmentPath.Create(departmentSlug.Value, parentPath);
 
-public sealed record Slug
-{
-    public string Value { get; }
-    private Slug(string value)
-    {
-        Value = value;
-    }
-    public static Slug Create(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ArgumentException("Department slug cannot be empty.", nameof(value));
-        }
-        return new Slug(value);
-    }
-}
-
-public sealed record ParentId
-{
-    public Guid Value { get; }
-    private ParentId(Guid value)
-    {
-        Value = value;
-    }
-    public static ParentId Create(Guid value)
-    {
-        if (value == Guid.Empty)
-        {
-            return new ParentId(Guid.Empty);
-        }
-        return new ParentId(value);
+        return new Department(departmentName, departmentSlug, parentIdValue, departmentPath, locations, positions);
     }
 }
