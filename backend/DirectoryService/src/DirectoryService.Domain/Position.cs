@@ -6,27 +6,36 @@ public sealed class Position
     {
     }
 
-    public Position(Guid id, string name, DateTime createdAt, DateTime updatedAt)
+    public Position(string name, DateTime createdAt, DateTime updateAt, IEnumerable<Department> departments)
     {
-        Id = id;
-        Name = name;
-        CreatedAt = createdAt;
-        UpdateAt = updatedAt;
-    }
-
-    public Position(Guid id, string name, DateTime createdAt, DateTime updateAt, IEnumerable<Department> departments)
-    {
-        _departments = departments.ToList();
-        Id = id;
-        Name = name;
+        Id = Guid.CreateVersion7();
+        Name = PositionName.Create(name);
         CreatedAt = createdAt;
         UpdateAt = updateAt;
+        _departments = departments.ToList();
     }
 
     private readonly List<Department> _departments = [];
     public Guid Id { get; private set; }
-    public string Name { get; private set; } = string.Empty;
+    public PositionName Name { get; private set; } = PositionName.Create(string.Empty);
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdateAt { get; private set; }
     public IReadOnlyList<Department> Departments => _departments;
+}
+
+public sealed record PositionName
+{
+    public string Value { get; }
+    private PositionName(string value)
+    {
+        Value = value;
+    }
+    public static PositionName Create(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new ArgumentException("Position name cannot be empty.", nameof(value));
+        }
+        return new PositionName(value);
+    }
 }

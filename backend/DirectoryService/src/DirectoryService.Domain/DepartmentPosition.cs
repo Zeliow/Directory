@@ -6,7 +6,7 @@ public sealed class DepartmentPosition
     {
     }
 
-    public DepartmentPosition(Guid id, int departmentId, int positionId)
+    public DepartmentPosition(Guid id, Guid departmentId, Guid positionId)
     {
         Id = id;
         DepartmentId = departmentId;
@@ -14,6 +14,6 @@ public sealed class DepartmentPosition
     }
 
     public Guid Id { get; private set; }
-    public int DepartmentId { get; private set; }
-    public int PositionId { get; private set; }
+    public Guid DepartmentId { get; private set; }
+    public Guid PositionId { get; private set; }
 }
