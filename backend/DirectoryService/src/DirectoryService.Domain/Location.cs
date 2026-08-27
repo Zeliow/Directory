@@ -1,4 +1,6 @@
-﻿namespace DirectoryService.Domain;
+﻿using DirectoryService.Domain.LocationVO;
+
+namespace DirectoryService.Domain;
 
 public sealed class Location
 {
@@ -22,38 +24,4 @@ public sealed class Location
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public IReadOnlyList<Department> Departments => _departments;
-}
-
-public sealed record LocationName
-{
-    public string Value { get; }
-    private LocationName(string value)
-    {
-        Value = value;
-    }
-    public static LocationName Create(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ArgumentException("Location name cannot be empty.", nameof(value));
-        }
-        return new LocationName(value);
-    }
-}
-
-public sealed record Address
-{
-    public string Value { get; }
-    private Address(string value)
-    {
-        Value = value;
-    }
-    public static Address Create(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ArgumentException("Address cannot be empty.", nameof(value));
-        }
-        return new Address(value);
-    }
 }
