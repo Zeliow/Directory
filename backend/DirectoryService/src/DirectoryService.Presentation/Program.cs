@@ -1,3 +1,5 @@
+using DirectoryService.Infrastructure.Postgres;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-builder.Services.AddHealthChecks();
+builder.Services.AddHealthChecks(); // health check endpoint from Microsoft SDK
+builder.Services.AddDbContext<DirectoryServiceDbContext>(options
+    => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))); // Add postgres database context
+builder.Services.AddHealthChecks().AddDbContextCheck<DirectoryServiceDbContext>(); // Add health check for the database context
 
 var app = builder.Build();
 

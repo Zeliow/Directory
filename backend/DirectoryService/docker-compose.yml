@@ -1,0 +1,26 @@
+services:  
+  #Наименование сервиса/ контейнера.
+  postgres: 
+    #Имя Контейнера
+    container_name: postgres
+    # Image - это уже готовый со всем содержимым шаблон или сама программа, что ей нужно для запуска.
+    # Image = шаблон, контейнер = запущенная копия этого шаблона.
+    image: postgres
+    # Настройка перезапуска
+    restart: always
+    environment:
+        #Наименование БД
+        POSTGRES_DB: directory_service_db
+        #Пользователь БД
+        POSTGRES_USER: postgres
+        #Пароль от БД
+        POSTGRES_PASSWORD: postgres
+    ports:
+    # Первый внешний (любой), а второй внутренний для работы с PostgreSQL (обязателен).
+      - "4545:5432" 
+    # Постоянное хранилище для данных работы контейнера вне зоны работы контейнера.
+    volumes:
+      - postgres-data:/var/lib/postgresql
+
+volumes:
+  postgres-data:
