@@ -9,8 +9,9 @@ public class PositionsRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddPosition(Guid id)
+    // Cap method to add a position entity to the database context
+    public async Task AddPosition(object entity)
     {
-        await _dbContext.AddAsync(id);
+        await _dbContext.AddAsync(entity);
     }
 }

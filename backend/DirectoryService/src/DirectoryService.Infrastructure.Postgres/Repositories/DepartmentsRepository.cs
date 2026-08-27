@@ -9,8 +9,9 @@ public class DepartmentsRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddDepartment(Guid id)
+    //cap method to add a department entity to the database context
+    public async Task AddDepartment(object entity)
     {
-        await _dbContext.AddAsync(id);
+        await _dbContext.AddAsync(entity);
     }
 }

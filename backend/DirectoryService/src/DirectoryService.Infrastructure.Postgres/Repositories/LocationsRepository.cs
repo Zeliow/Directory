@@ -9,8 +9,9 @@ public class LocationsRepository
         _dbContext = dbContext;
     }
 
-    public async Task AddLocation(Guid id)
+    // Cap method to add a location entity to the database context
+    public async Task AddLocation(object entity)
     {
-        await _dbContext.AddAsync(id);
+        await _dbContext.AddAsync(entity);
     }
 }
