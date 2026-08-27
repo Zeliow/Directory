@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks(); // health check endpoint from Microsoft SDK
-builder.Services.AddDbContext<ApplicationDBContext>(options
+builder.Services.AddDbContext<DirectoryServiceDbContext>(options
     => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))); // Add postgres database context
 
 var app = builder.Build();
