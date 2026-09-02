@@ -31,13 +31,19 @@ public sealed class Department
     public DepartmentName Name { get; private set; } = DepartmentName.Create(string.Empty);
     public DepartmentPath? Path { get; private set; }
     public Slug Slug { get; private set; } = Slug.Create(string.Empty);
-    public ParentId ParentId { get; private set; } = ParentId.Create(null);
+    public ParentId? ParentId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public IReadOnlyList<Location> Locations => _locations;
     public IReadOnlyList<Position> Positions => _positions;
 
-    public static Department Create(string name, string slug, string? parentPath, Guid? parentId, IEnumerable<Location> locations, IEnumerable<Position> positions)
+    public static Department Create(
+        string name,
+        string slug,
+        string? parentPath,
+        Guid? parentId,
+        IEnumerable<Location> locations,
+        IEnumerable<Position> positions)
     {
         var departmentName = DepartmentName.Create(name);
         var departmentSlug = Slug.Create(slug);

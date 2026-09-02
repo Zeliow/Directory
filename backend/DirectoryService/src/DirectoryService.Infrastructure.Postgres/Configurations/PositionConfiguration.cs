@@ -20,7 +20,7 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
             .HasMaxLength(MAX_NAME_LENGTH)
             .IsRequired()
             .HasConversion(
-            name => name.Value,
-            value => PositionName.Create(value));
+                name => name.Value,
+                value => PositionName.Create(value));
     }
 }

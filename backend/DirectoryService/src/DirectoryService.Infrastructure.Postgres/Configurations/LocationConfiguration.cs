@@ -16,13 +16,12 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
         builder.HasKey(l => l.Id)
             .HasName("id");
 
-        builder.Property(l => l.Name)
-            .HasColumnName("name")
-            .IsRequired()
-            .HasMaxLength(MAX_NAME_LENGTH);
 
         builder.Property(l => l.Name)
             .HasColumnName("name")
+            .IsRequired()
+            .HasMaxLength(MAX_NAME_LENGTH)
+            //туда в БД и обратно из БД
             .HasConversion(
                 name => name.Value,
                 value => LocationName.Create(value));
@@ -30,10 +29,7 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
         builder.Property(l => l.Address)
             .HasColumnName("address")
             .IsRequired()
-            .HasMaxLength(MAX_ADDRESS_LENGTH);
-
-        builder.Property(l => l.Address)
-            .HasColumnName("address")
+            .HasMaxLength(MAX_ADDRESS_LENGTH)
             .HasConversion(
                 address => address.Value,
                 value => Address.Create(value));
