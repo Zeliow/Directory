@@ -26,6 +26,8 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
                 name => name.Value,
                 value => LocationName.Create(value));
 
+        // Configure the Address property with a value object conversion
+        // Use Complex Property Mapping to map the Address value object to a single column in the database
         builder.Property(l => l.Address)
             .HasColumnName("address")
             .IsRequired()
