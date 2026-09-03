@@ -16,7 +16,6 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
         builder.HasKey(l => l.Id)
             .HasName("id");
 
-
         builder.Property(l => l.Name)
             .HasColumnName("name")
             .IsRequired()
@@ -34,6 +33,6 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
             .HasMaxLength(MAX_ADDRESS_LENGTH)
             .HasConversion(
                 address => address.Value,
-                value => Address.Create(value));
+                value => Address.CreateVO(value));
     }
 }
