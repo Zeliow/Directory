@@ -6,17 +6,14 @@ public sealed class DepartmentLocation
     {
     }
 
-    public DepartmentLocation(Guid id, Guid departmentId, Guid locationId)
+    public DepartmentLocation(Department department, Guid locationId)
     {
-        Id = id;
-        DepartmentId = departmentId;
+        Id = Guid.CreateVersion7();
+        Department = department;
         LocationId = locationId;
     }
 
     public Guid Id { get; private set; }
-    public Guid DepartmentId { get; private set; }
     public Guid LocationId { get; private set; }
-
     public Department Department { get; private set; } = null!;
-    public Location Location { get; private set; } = null!;
 }
