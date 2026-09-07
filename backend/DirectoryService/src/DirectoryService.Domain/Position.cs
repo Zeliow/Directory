@@ -8,7 +8,7 @@ public sealed class Position
     {
     }
 
-    public Position(string name, IEnumerable<Department> departments)
+    public Position(string name, IEnumerable<DepartmentPosition> departments)
     {
         Id = Guid.CreateVersion7();
         Name = PositionName.Create(name);
@@ -16,10 +16,10 @@ public sealed class Position
         _departments = departments.ToList();
     }
 
-    private readonly List<Department> _departments = [];
+    private readonly List<DepartmentPosition> _departments = [];
     public Guid Id { get; private set; }
     public PositionName Name { get; private set; } = PositionName.Create(string.Empty);
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public IReadOnlyList<Department> Departments => _departments;
+    public IReadOnlyList<DepartmentPosition> Departments => _departments;
 }

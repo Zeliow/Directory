@@ -13,8 +13,8 @@ public sealed class Department
                       Slug slug,
                       ParentId parentId,
                       DepartmentPath departmentPath,
-                      IEnumerable<Location> locations,
-                      IEnumerable<Position> positions)
+                      IEnumerable<DepartmentLocation> locations,
+                      IEnumerable<DepartmentPosition> positions)
     {
         Id = Guid.CreateVersion7();
         Name = name;
@@ -26,8 +26,8 @@ public sealed class Department
         _positions = positions.ToList();
     }
 
-    private readonly List<Location> _locations = [];
-    private readonly List<Position> _positions = [];
+    private readonly List<DepartmentLocation> _locations = [];
+    private readonly List<DepartmentPosition> _positions = [];
     public Guid Id { get; private set; }
     public DepartmentName Name { get; private set; } = DepartmentName.Create(string.Empty);
     public DepartmentPath? Path { get; private set; }
@@ -35,16 +35,16 @@ public sealed class Department
     public ParentId? ParentId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public IReadOnlyList<Location> Locations => _locations;
-    public IReadOnlyList<Position> Positions => _positions;
+    public IReadOnlyList<DepartmentLocation> Locations => _locations;
+    public IReadOnlyList<DepartmentPosition> Positions => _positions;
 
     public static Department Create(
         string name,
         string slug,
         string? parentPath,
         Guid? parentId,
-        IEnumerable<Location> locations,
-        IEnumerable<Position> positions)
+        IEnumerable<DepartmentLocation> locations,
+        IEnumerable<DepartmentPosition> positions)
     {
         var departmentName = DepartmentName.Create(name);
         var departmentSlug = Slug.Create(slug);
