@@ -13,8 +13,9 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
     public void Configure(EntityTypeBuilder<Location> builder)
     {
         builder.ToTable("locations");
+
         builder.HasKey(l => l.Id)
-            .HasName("id");
+            .HasName("pk_locations");
 
         builder.Property(l => l.Name)
             .HasColumnName("name")
@@ -34,5 +35,13 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
             .HasConversion(
                 address => address.Value,
                 value => Address.CreateVO(value));
+
+        builder.Property(l => l.CreatedAt)
+            .HasColumnName("created_at")
+            .IsRequired();
+
+        builder.Property(l => l.UpdatedAt)
+            .HasColumnName("updated_at")
+            .IsRequired();
     }
 }

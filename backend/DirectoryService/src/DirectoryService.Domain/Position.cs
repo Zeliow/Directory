@@ -20,6 +20,6 @@ public sealed class Position
     public Guid Id { get; private set; }
     public PositionName Name { get; private set; } = PositionName.Create(string.Empty);
     public DateTime CreatedAt { get; private set; }
-    public DateTime UpdateAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; }
     public IReadOnlyList<Department> Departments => _departments;
 }

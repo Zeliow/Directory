@@ -13,8 +13,9 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
     public void Configure(EntityTypeBuilder<Department> builder)
     {
         builder.ToTable("departments");
+
         builder.HasKey(d => d.Id)
-            .HasName("id");
+            .HasName("pk_departments");
 
         builder.Property(d => d.Name)
             .HasColumnName("name")
@@ -30,7 +31,8 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
             .IsRequired(false)
             .HasConversion(
                 v => v == null ? null : v.Value,
-                v => v == null ? null : DepartmentPath.Create(v));
+                v => v == null ? null : DepartmentPath.Create(v)
+            );
 
         builder.Property(d => d.Slug)
             .HasColumnName("slug")
@@ -47,5 +49,13 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
                 v => v == null ? null : v.Value,
                 v => v == null ? null : ParentId.Create(v)
             );
+
+        builder.Property(p => p.CreatedAt)
+            .HasColumnName("created_at")
+            .IsRequired();
+
+        builder.Property(p => p.UpdatedAt)
+            .HasColumnName("updated_at")
+            .IsRequired();
     }
 }

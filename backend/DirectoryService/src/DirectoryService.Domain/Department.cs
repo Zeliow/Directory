@@ -4,6 +4,7 @@ namespace DirectoryService.Domain;
 
 public sealed class Department
 {
+    //EF Core
     private Department()
     {
     }

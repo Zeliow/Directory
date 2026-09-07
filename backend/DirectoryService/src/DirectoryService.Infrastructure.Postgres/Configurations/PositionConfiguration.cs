@@ -13,7 +13,7 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
     {
         builder.ToTable("positions");
         builder.HasKey(p => p.Id)
-            .HasName("id");
+            .HasName("pk_positions");
 
         builder.Property(p => p.Name)
             .HasColumnName("name")
@@ -22,5 +22,13 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
             .HasConversion(
                 name => name.Value,
                 value => PositionName.Create(value));
+
+        builder.Property(p => p.CreatedAt)
+            .HasColumnName("created_at")
+            .IsRequired();
+
+        builder.Property(p => p.UpdatedAt)
+            .HasColumnName("updated_at")
+            .IsRequired();
     }
 }
