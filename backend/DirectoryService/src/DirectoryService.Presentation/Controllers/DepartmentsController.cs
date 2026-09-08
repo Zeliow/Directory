@@ -25,7 +25,7 @@ public class DepartmentsController : ControllerBase
     public async Task<IActionResult> CreateDepartment([FromBody] CreateDepartmentDto departmentDto)
     {
         // Logic to create a new department would go here
-        return Ok(new { Message = "Department created" });
+        return Ok(Guid.NewGuid());
     }
 
     [HttpPut("{id}")]

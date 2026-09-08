@@ -25,7 +25,7 @@ public class LocationsController : ControllerBase
     public async Task<IActionResult> CreateLocation([FromBody] CreateLocationDto locationDto)
     {
         // Logic to create a new location would go here
-        return Ok(new { Message = "Location created" });
+        return Ok(Guid.NewGuid());
     }
 
     [HttpPut("{id}")]

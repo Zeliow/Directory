@@ -25,7 +25,7 @@ public class PositionsController : ControllerBase
     public async Task<IActionResult> PostPositions([FromBody] CreatePositionDto PositionDto)
     {
         // Logic to create a new position would go here
-        return Ok(new { Message = "Position created" });
+        return Ok(Guid.NewGuid());
     }
 
     [HttpPut("{id}")]
