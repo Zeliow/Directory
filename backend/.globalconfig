@@ -1,5 +1,8 @@
 is_global = true
 
+#global file scoped
+csharp_style_namespace_declarations = file_scoped
+
 # Все правила категории security — ошибки
 dotnet_analyzer_diagnostic.category-security.severity = error
 

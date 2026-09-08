@@ -1,4 +1,6 @@
-﻿namespace DirectoryService.Domain;
+﻿using DirectoryService.Domain.PositionVO;
+
+namespace DirectoryService.Domain;
 
 public sealed class Position
 {
@@ -6,35 +8,20 @@ public sealed class Position
     {
     }
 
-    public Position(string name, IEnumerable<Department> departments)
+    public Position(PositionName name)
     {
         Id = Guid.CreateVersion7();
-        Name = PositionName.Create(name);
+        Name = name;
         CreatedAt = DateTime.UtcNow;
-        _departments = departments.ToList();
     }
 
-    private readonly List<Department> _departments = [];
     public Guid Id { get; private set; }
     public PositionName Name { get; private set; } = PositionName.Create(string.Empty);
     public DateTime CreatedAt { get; private set; }
-    public DateTime UpdateAt { get; private set; }
-    public IReadOnlyList<Department> Departments => _departments;
-}
+    public DateTime UpdatedAt { get; private set; }
 
-public sealed record PositionName
-{
-    public string Value { get; }
-    private PositionName(string value)
+    public static Position Create(PositionName positionName)
     {
-        Value = value;
-    }
-    public static PositionName Create(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            throw new ArgumentException("Position name cannot be empty.", nameof(value));
-        }
-        return new PositionName(value);
+        return new Position(positionName);
     }
 }
