@@ -5,4 +5,10 @@
     <ProjectReference Include="..\DirectoryService.Domain\DirectoryService.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Department\" />
+    <Folder Include="Location\" />
+    <Folder Include="Position\" />
+  </ItemGroup>
+
 </Project>
