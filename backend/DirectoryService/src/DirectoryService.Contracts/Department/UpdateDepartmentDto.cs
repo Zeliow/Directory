@@ -1,5 +1,3 @@
-﻿using DirectoryService.Domain.DepartmentVO;
+﻿namespace DirectoryService.Contracts.Department;
 
-namespace DirectoryService.Contracts.Department;
-
-sealed public record UpdateDepartmentDto(DepartmentName DepartmentName);
+sealed public record UpdateDepartmentDto(string DepartmentName);

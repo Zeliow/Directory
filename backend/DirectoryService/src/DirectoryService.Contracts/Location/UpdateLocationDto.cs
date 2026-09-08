@@ -1,5 +1,3 @@
-﻿using DirectoryService.Domain.LocationVO;
+﻿namespace DirectoryService.Contracts.Location;
 
-namespace DirectoryService.Contracts.Location;
-
-sealed public record UpdateLocationDto(LocationName LocationName);
+sealed public record UpdateLocationDto(string LocationName);

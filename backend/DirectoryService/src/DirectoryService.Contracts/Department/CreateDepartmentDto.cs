@@ -1,6 +1,3 @@
-﻿using DirectoryService.Domain;
-using DirectoryService.Domain.DepartmentVO;
+﻿namespace DirectoryService.Contracts.Department;
 
-namespace DirectoryService.Contracts.Department;
-
-sealed public record CreateDepartmentDto(DepartmentName Name, DepartmentPath Path, ParentId ParentId, Slug Slug);
+sealed public record CreateDepartmentDto(string Name, string Path, Guid ParentId, string Slug);

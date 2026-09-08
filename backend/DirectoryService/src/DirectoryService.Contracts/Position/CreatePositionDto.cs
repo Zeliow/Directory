@@ -1,5 +1,3 @@
-﻿using DirectoryService.Domain.PositionVO;
+﻿namespace DirectoryService.Contracts.Position;
 
-namespace DirectoryService.Contracts.Position;
-
-sealed public record CreatePositionDto(PositionName PositionName);
+sealed public record CreatePositionDto(string PositionName);
