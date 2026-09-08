@@ -14,7 +14,7 @@ public class PositionsController : ControllerBase
         return Ok(Array.Empty<string>());
     }
 
-    [HttpGet("id")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetPositionById(int id)
     {
         // Logic to retrieve a specific position by ID would go here
@@ -25,17 +25,17 @@ public class PositionsController : ControllerBase
     public async Task<IActionResult> PostPositions([FromBody] CreatePositionDto PositionDto)
     {
         // Logic to create a new position would go here
-        return Ok(new { Message = "Department created" });
+        return Ok(new { Message = "Position created" });
     }
 
-    [HttpPut("id")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> PutPosition(int id, [FromBody] UpdatePositionDto PositionDto)
     {
         // Logic to update a specific position by ID would go here
         return Ok(new { Message = $"Position with ID {id} updated" });
     }
 
-    [HttpDelete("id")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePosition(int id)
     {
         // Logic to delete a specific position by ID would go here

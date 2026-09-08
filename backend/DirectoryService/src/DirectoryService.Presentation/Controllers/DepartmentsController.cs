@@ -14,7 +14,7 @@ public class DepartmentsController : ControllerBase
         return Ok(Array.Empty<string>());
     }
 
-    [HttpGet("id")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetDepartmentById(int id)
     {
         // Logic to retrieve a specific department by ID would go here
@@ -28,14 +28,14 @@ public class DepartmentsController : ControllerBase
         return Ok(new { Message = "Department created" });
     }
 
-    [HttpPut("id")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDepartment(int id, [FromBody] UpdateDepartmentDto departmentDto)
     {
         // Logic to update a specific department by ID would go here
         return Ok(new { Message = $"Department with ID {id} updated" });
     }
 
-    [HttpDelete("id")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDepartment(int id)
     {
         // Logic to delete a specific department by ID would go here

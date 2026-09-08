@@ -14,7 +14,7 @@ public class LocationsController : ControllerBase
         return Ok(Array.Empty<string>());
     }
 
-    [HttpGet("id")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetLocationById(int id)
     {
         // Logic to retrieve a specific location by ID would go here
@@ -25,17 +25,17 @@ public class LocationsController : ControllerBase
     public async Task<IActionResult> CreateLocation([FromBody] CreateLocationDto locationDto)
     {
         // Logic to create a new location would go here
-        return Ok(new { Message = "Department created" });
+        return Ok(new { Message = "Location created" });
     }
 
-    [HttpPut("id")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> UpdateLocation(int id, [FromBody] UpdateLocationDto locationDto)
     {
         // Logic to update a specific location by ID would go here
         return Ok(new { Message = $"Location with ID {id} updated" });
     }
 
-    [HttpDelete("id")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteLocation(int id)
     {
         // Logic to delete a specific location by ID would go here
