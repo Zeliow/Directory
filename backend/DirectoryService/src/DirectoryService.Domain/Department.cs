@@ -46,6 +46,8 @@ public sealed class Department
         IEnumerable<DepartmentLocation> locations,
         IEnumerable<DepartmentPosition> positions)
     {
-        return new Department(name, slug, parentId, parentPath, locations, positions);
+        var departmentPath = DepartmentPath.Create(slug.Value, parentPath?.Value);
+
+        return new Department(name, slug, parentId, departmentPath, locations, positions);
     }
 }
