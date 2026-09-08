@@ -8,35 +8,44 @@ namespace DirectoryService.Presentation.Controllers;
 public class PositionsController : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetPositions()
+    public async Task<IActionResult> GetPositions(CancellationToken cancellationToken)
     {
         // Logic to retrieve positions would go here
         return Ok(Array.Empty<string>());
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetPositionById(int id)
+    [HttpGet("{id::guid}")]
+    public async Task<IActionResult> GetPositionById(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
     {
         // Logic to retrieve a specific position by ID would go here
         return NotFound();
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostPositions([FromBody] CreatePositionDto PositionDto)
+    public async Task<IActionResult> PostPositions(
+        [FromBody] CreatePositionDto PositionDto,
+        CancellationToken cancellationToken)
     {
         // Logic to create a new position would go here
         return Ok(Guid.NewGuid());
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutPosition(int id, [FromBody] UpdatePositionDto PositionDto)
+    [HttpPut("{id::guid}")]
+    public async Task<IActionResult> PutPosition(
+        [FromRoute] Guid id,
+        [FromBody] UpdatePositionDto PositionDto,
+        CancellationToken cancellationToken)
     {
         // Logic to update a specific position by ID would go here
         return Ok(new { Message = $"Position with ID {id} updated" });
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePosition(int id)
+    [HttpDelete("{id::guid}")]
+    public async Task<IActionResult> DeletePosition(
+        [FromRoute] Guid id,
+        CancellationToken cancellationToken)
     {
         // Logic to delete a specific position by ID would go here
         return Ok(new { Message = $"Position with ID {id} deleted" });

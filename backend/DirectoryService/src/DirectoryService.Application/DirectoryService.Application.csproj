@@ -7,8 +7,12 @@
 
   <ItemGroup>
     <Folder Include="Department\" />
-    <Folder Include="Location\" />
     <Folder Include="Position\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
 
 </Project>
