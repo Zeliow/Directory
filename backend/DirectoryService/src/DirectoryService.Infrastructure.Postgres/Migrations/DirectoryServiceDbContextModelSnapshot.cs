@@ -48,7 +48,8 @@ namespace DirectoryService.Infrastructure.Postgres.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
                         .HasColumnName("slug");
 
                     b.Property<DateTime>("UpdatedAt")

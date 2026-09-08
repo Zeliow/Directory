@@ -18,15 +18,12 @@ public sealed class Location
 
     public Guid Id { get; private set; }
     public LocationName Name { get; private set; } = LocationName.Create(string.Empty);
-    public Address Address { get; private set; } = Address.Create(string.Empty, string.Empty, string.Empty);
+    public Address Address { get; private set; } = Address.Create("Country", "City", "Street");
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
-    public static Location Create(string name, string country, string city, string street)
+    public static Location Create(LocationName name, Address address)
     {
-        var nameOfLocation = LocationName.Create(name);
-        var address = Address.Create(country, city, street);
-
-        return new Location(nameOfLocation, address);
+        return new Location(name, address);
     }
 }

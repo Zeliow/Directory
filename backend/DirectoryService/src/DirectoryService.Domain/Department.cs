@@ -11,8 +11,8 @@ public sealed class Department
 
     private Department(DepartmentName name,
                       Slug slug,
-                      ParentId parentId,
-                      DepartmentPath departmentPath,
+                      ParentId? parentId,
+                      DepartmentPath? departmentPath,
                       IEnumerable<DepartmentLocation> locations,
                       IEnumerable<DepartmentPosition> positions)
     {
@@ -39,19 +39,13 @@ public sealed class Department
     public IReadOnlyList<DepartmentPosition> Positions => _positions;
 
     public static Department Create(
-        string name,
-        string slug,
-        string? parentPath,
-        Guid? parentId,
+        DepartmentName name,
+        Slug slug,
+        DepartmentPath? parentPath,
+        ParentId? parentId,
         IEnumerable<DepartmentLocation> locations,
         IEnumerable<DepartmentPosition> positions)
     {
-        var departmentName = DepartmentName.Create(name);
-        var departmentSlug = Slug.Create(slug);
-        var parentIdValue = ParentId.Create(parentId);
-
-        var departmentPath = DepartmentPath.Create(departmentSlug.Value, parentPath);
-
-        return new Department(departmentName, departmentSlug, parentIdValue, departmentPath, locations, positions);
+        return new Department(name, slug, parentId, parentPath, locations, positions);
     }
 }

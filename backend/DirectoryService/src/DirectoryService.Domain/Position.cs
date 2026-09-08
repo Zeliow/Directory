@@ -8,10 +8,10 @@ public sealed class Position
     {
     }
 
-    public Position(string name)
+    public Position(PositionName name)
     {
         Id = Guid.CreateVersion7();
-        Name = PositionName.Create(name);
+        Name = name;
         CreatedAt = DateTime.UtcNow;
     }
 
@@ -19,4 +19,9 @@ public sealed class Position
     public PositionName Name { get; private set; } = PositionName.Create(string.Empty);
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
+
+    public static Position Create(PositionName positionName)
+    {
+        return new Position(positionName);
+    }
 }
