@@ -17,7 +17,7 @@ public sealed class Location
     }
 
     public Guid Id { get; private set; }
-    public LocationName Name { get; private set; } = LocationName.Create(string.Empty);
+    public LocationName Name { get; private set; } = LocationName.Create("Briton Beach");
     public Address Address { get; private set; } = Address.Create("Country", "City", "Street");
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
