@@ -1,11 +1,14 @@
+using DirectoryService.Application.Interfaces;
 using DirectoryService.Infrastructure.Postgres;
+using DirectoryService.Infrastructure.Postgres.Repositories;
+using DirectoryService.Presentation;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddScoped<ILocationRepository, LocationsRepository>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -15,6 +18,8 @@ builder.Services.AddDbContext<DirectoryServiceDbContext>(options
         builder.Configuration.GetConnectionString("DefaultConnection"))); // Add postgres database context
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<DirectoryServiceDbContext>(); // Add health check for the database context
+
+builder.Services.AddProgrammDependencies(); // Add application dependencies
 
 var app = builder.Build();
 
