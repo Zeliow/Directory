@@ -26,11 +26,13 @@ sealed public class LocationsService : ILocationsService
 
         if (!validationResult.IsValid) { throw new ValidationException(validationResult.Errors); }
 
-        var isUnique = await _locationRepository.IsUniqueLocationNameAsync(locationDto.LocationName, cancellationToken);
+        var locationName = LocationName.Create(locationDto.LocationName);
+
+        var isUnique = await _locationRepository.IsUniqueLocationNameAsync(locationName, cancellationToken);
 
         if (!isUnique) { throw new InvalidOperationException("Location with the same name already exists"); }
 
-        var locationName = LocationName.Create(locationDto.LocationName);
+        
 
         var locationAddress = Address.Create(
             locationDto.AddressDto.Country,
