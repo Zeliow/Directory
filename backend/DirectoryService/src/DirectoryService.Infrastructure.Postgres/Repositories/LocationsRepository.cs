@@ -19,38 +19,17 @@ public class LocationsRepository : ILocationRepository
 
     public async Task<Guid> AddAsync(Location location, CancellationToken cancellationToken)
     {
-        try
-        {
-            await _dbContext.AddAsync(location, cancellationToken);
+        await _dbContext.AddAsync(location, cancellationToken);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return location.Id;
-        }
-        catch (Exception ex)
-        {
-            throw new InvalidDataException("Operation fail: {0}", ex);
-        }
-    }
-
-    // Cap method to add a location entity to the database context
-    public async Task AddLocation(object entity)
-    {
-        await _dbContext.AddAsync(entity);
+        return location.Id;
     }
 
     public async Task<bool> IsUniqueLocationNameAsync(LocationName locationName, CancellationToken cancellationToken)
     {
-        try
-        {
-            var existingLocation = await _dbContext.Set<Location>().AnyAsync(l => l.Name == locationName, cancellationToken);
-            _logger.LogInformation("Checking uniqueness of location name: {LocationName}, IsUnique: {IsUnique}", locationName, !existingLocation);
-            return !existingLocation;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error checking uniqueness of location name: {LocationName}", locationName);
-            throw new InvalidDataException("Operation fail: {0}", ex);
-        }
+        var existingLocation = await _dbContext.Set<Location>().AnyAsync(l => l.Name == locationName, cancellationToken);
+        _logger.LogInformation("Checking uniqueness of location name: {LocationName}, IsUnique: {IsUnique}", locationName, !existingLocation);
+        return !existingLocation;
     }
 }
