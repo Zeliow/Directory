@@ -24,15 +24,13 @@ sealed public class LocationsService : ILocationsService
     {
         var validationResult = await _createLocationValidator.ValidateAsync(locationDto, cancellationToken);
 
-        if (!validationResult.IsValid) { throw new ValidationException(validationResult.Errors); }
+        if (!validationResult.IsValid) { _logger.LogError("Invalid location data provided."); throw new ValidationException(validationResult.Errors); }
 
         var locationName = LocationName.Create(locationDto.LocationName);
 
         var isUnique = await _locationRepository.IsUniqueLocationNameAsync(locationName, cancellationToken);
 
-        if (!isUnique) { throw new InvalidOperationException("Location with the same name already exists"); }
-
-        
+        if (!isUnique) { _logger.LogError("Location with the same name already exists."); throw new InvalidOperationException("Location with the same name already exists"); }
 
         var locationAddress = Address.Create(
             locationDto.AddressDto.Country,

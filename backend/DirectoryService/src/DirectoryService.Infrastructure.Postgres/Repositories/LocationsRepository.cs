@@ -2,16 +2,19 @@
 using DirectoryService.Domain;
 using DirectoryService.Domain.LocationVO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DirectoryService.Infrastructure.Postgres.Repositories;
 
 public class LocationsRepository : ILocationRepository
 {
     private readonly DirectoryServiceDbContext _dbContext;
+    private readonly ILogger<LocationsRepository> _logger;
 
-    public LocationsRepository(DirectoryServiceDbContext dbContext)
+    public LocationsRepository(DirectoryServiceDbContext dbContext, ILogger<LocationsRepository> logger)
     {
         _dbContext = dbContext;
+        _logger = logger;
     }
 
     public async Task<Guid> AddAsync(Location location, CancellationToken cancellationToken)
@@ -41,10 +44,12 @@ public class LocationsRepository : ILocationRepository
         try
         {
             var existingLocation = await _dbContext.Set<Location>().AnyAsync(l => l.Name == locationName, cancellationToken);
+            _logger.LogInformation("Checking uniqueness of location name: {LocationName}, IsUnique: {IsUnique}", locationName, !existingLocation);
             return !existingLocation;
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error checking uniqueness of location name: {LocationName}", locationName);
             throw new InvalidDataException("Operation fail: {0}", ex);
         }
     }
