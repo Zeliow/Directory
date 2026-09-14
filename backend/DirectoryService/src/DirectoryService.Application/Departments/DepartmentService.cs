@@ -5,15 +5,15 @@ using DirectoryService.Domain.DepartmentVO;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
-namespace DirectoryService.Application;
+namespace DirectoryService.Application.Departments;
 
-public class DepartmentsService : IDepartmentsService
+public class DepartmentService : IDepartmentService
 {
-    private readonly ILogger<DepartmentsService> _logger;
+    private readonly ILogger<DepartmentService> _logger;
     private readonly IDepartmentRepository _departmentRepository;
     private readonly IValidator<CreateDepartmentDto> _CreateDepartmentValidator;
 
-    public DepartmentsService(ILogger<DepartmentsService> logger, IDepartmentRepository departmentRepository, IValidator<CreateDepartmentDto> createDepartmentValidator)
+    public DepartmentService(ILogger<DepartmentService> logger, IDepartmentRepository departmentRepository, IValidator<CreateDepartmentDto> createDepartmentValidator)
     {
         _logger = logger;
         _departmentRepository = departmentRepository;
@@ -33,9 +33,16 @@ public class DepartmentsService : IDepartmentsService
 
         var departmentSlug = Slug.Create(departmentDto.Slug);
 
+        DepartmentPath? departmentPath = null;
+        if (departmentDto.ParentId != null)
+        {
+            departmentPath = await _departmentRepository.GetByIdAsync(departmentDto.ParentId.Value, cancellationToken);
+        }
+
         var parentId = ParentId.Create(departmentDto.ParentId);
 
-        var department = Department.Create(departmentName, departmentSlug, parentId, departmentDto.LocationIds);
+        var department = Department.Create(departmentName, departmentSlug, departmentPath, parentId, departmentDto.LocationIds);
+
         _logger.LogInformation("Success create department with id {Id}", department.Id);
         await _departmentRepository.AddAsync(department, cancellationToken);
         return department.Id;

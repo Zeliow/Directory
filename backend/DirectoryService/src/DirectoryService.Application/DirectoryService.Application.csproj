@@ -6,7 +6,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Department\" />
     <Folder Include="Position\" />
   </ItemGroup>
 

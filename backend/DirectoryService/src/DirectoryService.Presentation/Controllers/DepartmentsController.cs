@@ -1,4 +1,4 @@
-﻿using DirectoryService.Application;
+﻿using DirectoryService.Application.Departments;
 using DirectoryService.Contracts.Department;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +8,9 @@ namespace DirectoryService.Presentation.Controllers;
 [ApiController]
 public class DepartmentsController : ControllerBase
 {
-    private readonly IDepartmentsService _departmentsService;
+    private readonly IDepartmentService _departmentsService;
 
-    public DepartmentsController(IDepartmentsService departmentsService)
+    public DepartmentsController(IDepartmentService departmentsService)
     {
         _departmentsService = departmentsService;
     }

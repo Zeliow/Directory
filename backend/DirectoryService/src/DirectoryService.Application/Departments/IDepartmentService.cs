@@ -1,8 +1,8 @@
 ﻿using DirectoryService.Contracts.Department;
 
-namespace DirectoryService.Application;
+namespace DirectoryService.Application.Departments;
 
-public interface IDepartmentsService
+public interface IDepartmentService
 {
     Task<Guid> CreateAsync(CreateDepartmentDto departmentDto, CancellationToken cancellationToken);
 }
