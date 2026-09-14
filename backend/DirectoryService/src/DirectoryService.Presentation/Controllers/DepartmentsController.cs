@@ -1,4 +1,5 @@
-﻿using DirectoryService.Contracts.Department;
+﻿using DirectoryService.Application;
+using DirectoryService.Contracts.Department;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DirectoryService.Presentation.Controllers;
@@ -7,6 +8,13 @@ namespace DirectoryService.Presentation.Controllers;
 [ApiController]
 public class DepartmentsController : ControllerBase
 {
+    private readonly IDepartmentsService _departmentsService;
+
+    public DepartmentsController(IDepartmentsService departmentsService)
+    {
+        _departmentsService = departmentsService;
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetDepartments(CancellationToken cancellationToken)
     {
@@ -28,8 +36,9 @@ public class DepartmentsController : ControllerBase
         [FromBody] CreateDepartmentDto departmentDto,
         CancellationToken cancellationToken)
     {
+        var departmentId = await _departmentsService.CreateAsync(departmentDto, cancellationToken);
         // Logic to create a new department would go here
-        return Ok(Guid.NewGuid());
+        return Ok(departmentId);
     }
 
     [HttpPut("{id::guid}")]

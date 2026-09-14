@@ -12,9 +12,7 @@ public sealed class Department
     private Department(DepartmentName name,
                       Slug slug,
                       ParentId? parentId,
-                      DepartmentPath? departmentPath,
-                      IEnumerable<DepartmentLocation> locations,
-                      IEnumerable<DepartmentPosition> positions)
+                      DepartmentPath? departmentPath)
     {
         Id = Guid.CreateVersion7();
         Name = name;
@@ -22,8 +20,6 @@ public sealed class Department
         ParentId = parentId;
         Path = departmentPath;
         CreatedAt = DateTime.UtcNow;
-        _locations = locations.ToList();
-        _positions = positions.ToList();
     }
 
     private readonly List<DepartmentLocation> _locations = [];
@@ -43,11 +39,22 @@ public sealed class Department
         Slug slug,
         DepartmentPath? parentPath,
         ParentId? parentId,
-        IEnumerable<DepartmentLocation> locations,
-        IEnumerable<DepartmentPosition> positions)
+        IEnumerable<Guid> locations)
     {
         var departmentPath = DepartmentPath.Create(slug.Value, parentPath?.Value);
+        var department = new Department(name, slug, parentId, departmentPath);
 
-        return new Department(name, slug, parentId, departmentPath, locations, positions);
+        foreach (var id in locations)
+        {
+            department.AddLocation(id);
+        }
+
+        return department;
+    }
+
+    public void AddLocation(Guid locationId)
+    {
+        if (_locations.Any(l => l.LocationId == locationId)) return;
+        _locations.Add(new DepartmentLocation(this, locationId));
     }
 }

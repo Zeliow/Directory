@@ -1,17 +1,25 @@
-﻿namespace DirectoryService.Infrastructure.Postgres.Repositories;
+﻿using DirectoryService.Application.Interfaces;
+using DirectoryService.Domain;
+using Microsoft.Extensions.Logging;
 
-public class DepartmentsRepository
+namespace DirectoryService.Infrastructure.Postgres.Repositories;
+
+public class DepartmentsRepository : IDepartmentRepository
 {
     private readonly DirectoryServiceDbContext _dbContext;
+    private readonly ILogger<DepartmentsRepository> _logger;
 
-    public DepartmentsRepository(DirectoryServiceDbContext dbContext)
+    public DepartmentsRepository(DirectoryServiceDbContext dbContext, ILogger<DepartmentsRepository> logger)
     {
         _dbContext = dbContext;
+        _logger = logger;
     }
 
     //cap method to add a department entity to the database context
-    public async Task AddDepartment(object entity)
+    public async Task AddAsync(Department department, CancellationToken cancellationToken)
     {
-        await _dbContext.AddAsync(entity);
+        await _dbContext.AddAsync(department, cancellationToken);
+        _logger.LogInformation("Department entity added to the database context: {DepartmentId}", department.Id);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
