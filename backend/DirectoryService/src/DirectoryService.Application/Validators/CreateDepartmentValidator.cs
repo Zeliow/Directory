@@ -19,23 +19,8 @@ public class CreateDepartmentValidator : AbstractValidator<CreateDepartmentDto>
             .MinimumLength(4);
 
         RuleFor(x => x.LocationIds)
-            .NotNull().WithMessage("Недопустимо пустое значение LocationIds")
-            .MustAsync(async (locationIds, cancellationToken) =>
-            {
-                if (locationIds == null || !locationIds.Any())
-                {
-                    return false;
-                }
-
-                foreach (var locationId in locationIds)
-                {
-                    if (!await locationRepository.IsValidLocationsAsync(new List<Guid> { locationId }, cancellationToken))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }).WithMessage("LocationIds не существует в базе данных");
+            .NotEmpty()
+            .MustAsync(locationRepository.IsValidLocationsAsync)
+            .WithMessage("Одна или несколько указанных локаций не существуют.");
     }
 }

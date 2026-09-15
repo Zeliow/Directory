@@ -57,6 +57,28 @@ public sealed class DapperLocationsRepository : ILocationRepository
 
     public async Task<bool> IsValidLocationsAsync(IEnumerable<Guid> locationIds, CancellationToken cancellationToken)
     {
-        return true;
+        var distinctIds = locationIds?.Distinct().ToArray() ?? Array.Empty<Guid>();
+        if (distinctIds.Length == 0)
+        {
+            return false;
+        }
+
+        const string sql = """
+        SELECT COUNT(*)
+        FROM public.locations
+        WHERE "Id" = ANY(@Ids);
+        """;
+
+        await using var connection = new NpgsqlConnection(_connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        var command = new CommandDefinition(
+            sql,
+            new { Ids = distinctIds },
+            cancellationToken: cancellationToken);
+
+        var count = await connection.ExecuteScalarAsync<int>(command);
+
+        return count == distinctIds.Length;
     }
 }

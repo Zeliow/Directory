@@ -35,11 +35,11 @@ public class LocationsRepository : ILocationRepository
 
     public async Task<bool> IsValidLocationsAsync(IEnumerable<Guid> locationIds, CancellationToken cancellationToken)
     {
-        bool isValid = false;
-        foreach (var item in locationIds)
-        {
-            isValid = await _dbContext.Set<Location>().AnyAsync(l => l.Id == item, cancellationToken);
-        }
-        return isValid;
+        var distinctIds = locationIds.Distinct().ToList();
+
+        var existingCount = await _dbContext.Set<Location>()
+            .CountAsync(l => distinctIds.Contains(l.Id), cancellationToken);
+
+        return existingCount == distinctIds.Count;
     }
 }
