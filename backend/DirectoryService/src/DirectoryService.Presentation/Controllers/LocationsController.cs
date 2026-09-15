@@ -1,5 +1,6 @@
-﻿using DirectoryService.Application;
+﻿using DirectoryService.Application.Locations;
 using DirectoryService.Contracts.Location;
+using DirectoryService.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DirectoryService.Presentation.Controllers;
@@ -18,8 +19,8 @@ public class LocationsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetLocations(CancellationToken cancellationToken)
     {
-        // Logic to retrieve locations would go here
-        return Ok(Array.Empty<string>());
+        var locations = await _locationsService.ListLocationsAsync(cancellationToken);
+        return Ok(locations);
     }
 
     [HttpGet("{id::guid}")]

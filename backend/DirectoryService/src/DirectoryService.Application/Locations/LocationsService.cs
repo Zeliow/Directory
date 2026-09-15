@@ -5,7 +5,7 @@ using DirectoryService.Domain.LocationVO;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
-namespace DirectoryService.Application;
+namespace DirectoryService.Application.Locations;
 
 sealed public class LocationsService : ILocationsService
 {
@@ -43,5 +43,26 @@ sealed public class LocationsService : ILocationsService
         var result = await _locationRepository.AddAsync(location, cancellationToken);
 
         return result;
+    }
+
+    public async Task<bool> UpdateAsync(Guid locationId, UpdateLocationDto locationDto, CancellationToken cancellationToken)
+    {
+        var locationName = LocationName.Create(locationDto.LocationName);
+        var isUnique = await _locationRepository.IsUniqueLocationNameAsync(locationName, cancellationToken);
+        if (!isUnique) { _logger.LogError("Location with the same name already exists."); throw new InvalidOperationException("Location with the same name already exists"); }
+
+        var locationAddress = Address.Create(
+            locationDto.AddressDto.Country,
+            locationDto.AddressDto.City,
+            locationDto.AddressDto.Street);
+
+        var result = await _locationRepository.UpdateDataAsync(locationName, locationAddress, cancellationToken);
+        return result != Guid.Empty;
+    }
+
+    public async Task<IReadOnlyCollection<Location>> ListLocationsAsync(CancellationToken cancellationToken)
+    {
+        var location = await _locationRepository.GetAllAsync(cancellationToken);
+        return location;
     }
 }

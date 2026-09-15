@@ -18,8 +18,44 @@ public class DepartmentsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetDepartments(CancellationToken cancellationToken)
     {
-        // Logic to retrieve departments would go here
-        return Ok(Array.Empty<string>());
+        var departments = await _departmentsService.GetDepartmentsAsync(cancellationToken);
+        return Ok(departments);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateDepartment(
+       [FromBody] CreateDepartmentDto departmentDto,
+       CancellationToken cancellationToken)
+    {
+        var departmentId = await _departmentsService.CreateAsync(departmentDto, cancellationToken);
+        return Ok(departmentId);
+    }
+
+    [HttpPatch("{id::guid}")]
+    public async Task<IActionResult> UpdateDepartment(
+       [FromRoute] Guid id,
+       [FromBody] UpdateDepartmentDto departmentDto,
+       CancellationToken cancellationToken)
+    {
+        var result = await _departmentsService.UpdateAsync(id, departmentDto, cancellationToken);
+        if (result)
+        {
+            return Ok(new { Message = $"Department with ID {id} updated" });
+        }
+        else
+        {
+            return BadRequest(new { Message = $"Failed to update department with ID {id}" });
+        }
+    }
+
+    [HttpPost("{id::guid}/locations/{locationId::guid}")]
+    public async Task<IActionResult> UpdateRelations(
+        [FromRoute] Guid id,
+        [FromRoute] Guid locationId,
+        CancellationToken cancellationToken)
+    {
+        var result = await _departmentsService.CreateRelation(id, locationId, cancellationToken);
+        return Ok(result);
     }
 
     [HttpGet("{id::guid}")]
@@ -29,26 +65,6 @@ public class DepartmentsController : ControllerBase
     {
         // Logic to retrieve a specific department by ID would go here
         return NotFound();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateDepartment(
-        [FromBody] CreateDepartmentDto departmentDto,
-        CancellationToken cancellationToken)
-    {
-        var departmentId = await _departmentsService.CreateAsync(departmentDto, cancellationToken);
-        // Logic to create a new department would go here
-        return Ok(departmentId);
-    }
-
-    [HttpPut("{id::guid}")]
-    public async Task<IActionResult> UpdateDepartment(
-        [FromRoute] Guid id,
-        [FromBody] UpdateDepartmentDto departmentDto,
-        CancellationToken cancellationToken)
-    {
-        // Logic to update a specific department by ID would go here
-        return Ok(new { Message = $"Department with ID {id} updated" });
     }
 
     [HttpDelete("{id::guid}")]

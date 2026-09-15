@@ -57,4 +57,10 @@ public sealed class Department
         if (_locations.Any(l => l.LocationId == locationId)) return;
         _locations.Add(new DepartmentLocation(this, locationId));
     }
+
+    public void UpdateDepartmentName(DepartmentName newName)
+    {
+        Name = newName;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }
