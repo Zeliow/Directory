@@ -1,5 +1,7 @@
 ﻿using DirectoryService.Application.Interfaces;
 using DirectoryService.Domain;
+using DirectoryService.Domain.DepartmentVO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace DirectoryService.Infrastructure.Postgres.Repositories;
@@ -21,5 +23,11 @@ public class DepartmentsRepository : IDepartmentRepository
         await _dbContext.AddAsync(department, cancellationToken);
         _logger.LogInformation("Department entity added to the database context: {DepartmentId}", department.Id);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<DepartmentPath?> GetByIdAsync(Guid departmentId, CancellationToken cancellationToken)
+    {
+        var result = await _dbContext.Set<Department>().FirstOrDefaultAsync(d => d.Id == departmentId, cancellationToken);
+        return result?.Path;
     }
 }

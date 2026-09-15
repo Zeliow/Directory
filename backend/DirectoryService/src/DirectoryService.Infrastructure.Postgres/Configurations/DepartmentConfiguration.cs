@@ -32,7 +32,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
             .IsRequired(false)
             .HasConversion(
                 v => v == null ? null : v.Value,
-                v => v == null ? null : DepartmentPath.Create(v)
+                v => v == null ? null : DepartmentPath.CreateFromDatabase(v)
             );
 
         builder.Property(d => d.Slug)

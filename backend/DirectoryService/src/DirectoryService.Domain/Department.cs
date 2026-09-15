@@ -25,9 +25,9 @@ public sealed class Department
     private readonly List<DepartmentLocation> _locations = [];
     private readonly List<DepartmentPosition> _positions = [];
     public Guid Id { get; private set; }
-    public DepartmentName Name { get; private set; } = DepartmentName.Create(string.Empty);
+    public DepartmentName Name { get; private set; } = null!;
     public DepartmentPath? Path { get; private set; }
-    public Slug Slug { get; private set; } = Slug.Create(string.Empty);
+    public Slug Slug { get; private set; } = null!;
     public ParentId? ParentId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }

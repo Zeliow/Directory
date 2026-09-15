@@ -23,6 +23,7 @@ public class DepartmentService : IDepartmentService
     public async Task<Guid> CreateAsync(CreateDepartmentDto departmentDto, CancellationToken cancellationToken)
     {
         var validationResult = await _CreateDepartmentValidator.ValidateAsync(departmentDto, cancellationToken);
+        
         if (!validationResult.IsValid)
         {
             _logger.LogError("Invalid department data provided.");
@@ -30,8 +31,10 @@ public class DepartmentService : IDepartmentService
         }
 
         var departmentName = DepartmentName.Create(departmentDto.Name);
+        _logger.LogInformation("Department name is correct!");
 
         var departmentSlug = Slug.Create(departmentDto.Slug);
+        _logger.LogInformation("Department slug is correct!");
 
         DepartmentPath? departmentPath = null;
         if (departmentDto.ParentId != null)

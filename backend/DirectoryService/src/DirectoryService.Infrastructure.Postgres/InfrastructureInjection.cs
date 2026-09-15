@@ -18,6 +18,7 @@ public static class InfrastructureInjection
         else
             services.AddScoped<ILocationRepository, LocationsRepository>();
 
+        services.AddScoped<IDepartmentRepository, DepartmentsRepository>();
         return services;
     }
 }
