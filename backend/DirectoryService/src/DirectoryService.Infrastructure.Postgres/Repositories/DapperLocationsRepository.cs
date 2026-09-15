@@ -54,4 +54,9 @@ public sealed class DapperLocationsRepository : ILocationRepository
 
         return !exists;
     }
+
+    public async Task<bool> IsValidLocationsAsync(IEnumerable<Guid> locationIds, CancellationToken cancellationToken)
+    {
+        return true;
+    }
 }

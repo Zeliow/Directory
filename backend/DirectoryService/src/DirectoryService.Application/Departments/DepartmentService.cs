@@ -23,7 +23,7 @@ public class DepartmentService : IDepartmentService
     public async Task<Guid> CreateAsync(CreateDepartmentDto departmentDto, CancellationToken cancellationToken)
     {
         var validationResult = await _CreateDepartmentValidator.ValidateAsync(departmentDto, cancellationToken);
-        
+
         if (!validationResult.IsValid)
         {
             _logger.LogError("Invalid department data provided.");
@@ -41,7 +41,11 @@ public class DepartmentService : IDepartmentService
         {
             departmentPath = await _departmentRepository.GetByIdAsync(departmentDto.ParentId.Value, cancellationToken);
         }
-
+        if (departmentPath == null && departmentDto.ParentId != null)
+        {
+            _logger.LogError("Parent department with id {ParentId} not found.", departmentDto.ParentId);
+            throw new ArgumentException($"Parent department with id {departmentDto.ParentId} not found.", nameof(departmentDto));
+        }
         var parentId = ParentId.Create(departmentDto.ParentId);
 
         var department = Department.Create(departmentName, departmentSlug, departmentPath, parentId, departmentDto.LocationIds);

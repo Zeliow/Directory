@@ -32,4 +32,14 @@ public class LocationsRepository : ILocationRepository
         _logger.LogInformation("Checking uniqueness of location name: {LocationName}, IsUnique: {IsUnique}", locationName, !existingLocation);
         return !existingLocation;
     }
+
+    public async Task<bool> IsValidLocationsAsync(IEnumerable<Guid> locationIds, CancellationToken cancellationToken)
+    {
+        bool isValid = false;
+        foreach (var item in locationIds)
+        {
+            isValid = await _dbContext.Set<Location>().AnyAsync(l => l.Id == item, cancellationToken);
+        }
+        return isValid;
+    }
 }
