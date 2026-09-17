@@ -56,9 +56,9 @@ public class DepartmentsController : ControllerBase
     {
         var createDepartmentRelationDto = new CreateDepartmentRelationDto(LocationId: locationId, DepartmentId: id);
         var result = await _departmentsService.CreateRelation(createDepartmentRelationDto, cancellationToken);
-        if (result)
+        if (!result)
         {
-            return NotFound("Relation already exists.");
+            return Conflict("Relation already exists.");
         }
         else
         {
@@ -74,9 +74,9 @@ public class DepartmentsController : ControllerBase
     {
         var deleteDepartmentRelationDto = new DeleteDepartmentRelationDto(LocationId: locationId, DepartmentId: id);
         var result = await _departmentsService.DeleteRelation(deleteDepartmentRelationDto, cancellationToken);
-        if (result)
+        if (!result)
         {
-            return NotFound("Relation not found.");
+            return Conflict("Relation not found.");
         }
         else
         {
