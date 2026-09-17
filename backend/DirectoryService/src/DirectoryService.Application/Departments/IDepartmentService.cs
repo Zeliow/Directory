@@ -7,13 +7,15 @@ public interface IDepartmentService
 {
     Task<Guid> CreateAsync(CreateDepartmentDto departmentDto, CancellationToken cancellationToken);
 
-    Task<bool> CreateRelation(Guid departmentId, Guid locationId, CancellationToken cancellationToken);
-
-    Task<Guid> DeleteAsync(Guid DepartmentId, CancellationToken cancellationToken);
-
     Task<Department> GetByIdAsync(Guid departmentId, CancellationToken cancellationToken);
+
+    Task<IReadOnlyCollection<Department>> GetDepartmentsAsync(CancellationToken cancellationToken);
 
     Task<bool> UpdateAsync(Guid departmentId, UpdateDepartmentDto departmentDto, CancellationToken cancellationToken);
 
-    Task<IReadOnlyCollection<Department>> GetDepartmentsAsync(CancellationToken cancellationToken);
+    Task<bool> DeleteAsync(Guid DepartmentId, CancellationToken cancellationToken);
+
+    Task<bool> CreateRelation(CreateDepartmentRelationDto departmentRelationDto, CancellationToken cancellationToken);
+
+    Task<bool> DeleteRelation(DeleteDepartmentRelationDto departmentRelationDto, CancellationToken cancellationToken);
 }

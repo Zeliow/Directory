@@ -56,13 +56,27 @@ sealed public class LocationsService : ILocationsService
             locationDto.AddressDto.City,
             locationDto.AddressDto.Street);
 
-        var result = await _locationRepository.UpdateDataAsync(locationName, locationAddress, cancellationToken);
-        return result != Guid.Empty;
+        var result = await _locationRepository.UpdateDataAsync(locationId, locationAddress, locationName, cancellationToken);
+        return result;
     }
 
     public async Task<IReadOnlyCollection<Location>> ListLocationsAsync(CancellationToken cancellationToken)
     {
         var location = await _locationRepository.GetAllAsync(cancellationToken);
         return location;
+    }
+
+    public async Task<Location> GetByidAsync(Guid locationId, CancellationToken cancellationToken)
+    {
+        var location = await _locationRepository.GetByIdAsync(locationId, cancellationToken);
+        if (location == null) { _logger.LogError("Location with id {LocationId} not found.", locationId); throw new ArgumentException($"Location with id {locationId} not found.", nameof(locationId)); }
+        return location;
+    }
+
+    public async Task<bool> DeleteAsync(Guid locationId, CancellationToken cancellationToken)
+    {
+        var result = await _locationRepository.DeleteAsync(locationId, cancellationToken);
+        _logger.LogInformation("Deleting location with id {LocationId}", locationId);
+        return result;
     }
 }

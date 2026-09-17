@@ -52,10 +52,19 @@ public sealed class Department
         return department;
     }
 
-    public void AddLocation(Guid locationId)
+    public bool AddLocation(Guid locationId)
     {
-        if (_locations.Any(l => l.LocationId == locationId)) return;
+        if (_locations.Any(l => l.LocationId == locationId)) return false;
         _locations.Add(new DepartmentLocation(this, locationId));
+        return true;
+    }
+
+    public bool RemoveLocation(Guid locationId)
+    {
+        var location = _locations.FirstOrDefault(l => l.LocationId == locationId);
+        if (location == null) return false;
+        _locations.Remove(location);
+        return true;
     }
 
     public void UpdateDepartmentName(DepartmentName newName)

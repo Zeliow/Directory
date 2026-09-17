@@ -11,7 +11,7 @@ public class DepartmentLocationConfiguration : IEntityTypeConfiguration<Departme
         builder.ToTable("department_location");
 
         builder.HasKey(dl => dl.Id).HasName("pk_department_location");
-        builder.Property(dl => dl.Id).HasColumnName("id");
+        builder.Property(dl => dl.Id).HasColumnName("id").ValueGeneratedNever();
 
         // 1. Связь с родителем (Department) через теневой внешний ключ
         builder.HasOne(dl => dl.Department)

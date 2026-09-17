@@ -32,10 +32,18 @@ public class DepartmentsRepository : IDepartmentRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<DepartmentPath?> GetByIdAsync(Guid departmentId, CancellationToken cancellationToken)
+    public async Task<DepartmentPath?> GetPathByIdAsync(Guid departmentId, CancellationToken cancellationToken)
     {
         var result = await _dbContext.Set<Department>().FirstOrDefaultAsync(d => d.Id == departmentId, cancellationToken);
         return result?.Path;
+    }
+
+    public async Task<Department?> GetByIdAsync(Guid departmentId, CancellationToken cancellationToken)
+    {
+        var department = await _dbContext.Set<Department>()
+            .Include(d => d.Locations)
+            .FirstOrDefaultAsync(d => d.Id == departmentId, cancellationToken);
+        return department;
     }
 
     public async Task<IReadOnlyCollection<Department>> GetAllAsync(CancellationToken cancellationToken)
@@ -55,5 +63,25 @@ public class DepartmentsRepository : IDepartmentRepository
         department.UpdateDepartmentName(departmentName);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return true;
+    }
+
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> DeleteAsync(Guid departmentId, CancellationToken cancellationToken)
+    {
+        var department = await _dbContext.Set<Department>().FirstOrDefaultAsync(d => d.Id == departmentId, cancellationToken);
+        if (department == null)
+        {
+            return false;
+        }
+        else
+        {
+            _dbContext.Set<Department>().Remove(department);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return true;
+        }
     }
 }

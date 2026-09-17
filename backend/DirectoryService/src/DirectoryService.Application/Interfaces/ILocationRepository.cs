@@ -15,4 +15,8 @@ public interface ILocationRepository
     Task<bool> IsValidLocationsAsync(IEnumerable<Guid> locationIds, CancellationToken cancellationToken);
 
     Task<IReadOnlyCollection<Location>> GetAllAsync(CancellationToken cancellationToken);
+
+    Task<Location?> GetByIdAsync(Guid locationId, CancellationToken cancellationToken);
+
+    Task<bool> DeleteAsync(Guid locationId, CancellationToken cancellationToken);
 }

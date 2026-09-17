@@ -54,7 +54,19 @@ public class DepartmentsController : ControllerBase
         [FromRoute] Guid locationId,
         CancellationToken cancellationToken)
     {
-        var result = await _departmentsService.CreateRelation(id, locationId, cancellationToken);
+        var createDepartmentRelationDto = new CreateDepartmentRelationDto(LocationId: locationId, DepartmentId: id);
+        var result = await _departmentsService.CreateRelation(createDepartmentRelationDto, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpDelete("{id::guid}/locations/{locationId::guid}")]
+    public async Task<IActionResult> DeleteRelations(
+        [FromRoute] Guid id,
+        [FromRoute] Guid locationId,
+        CancellationToken cancellationToken)
+    {
+        var deleteDepartmentRelationDto = new DeleteDepartmentRelationDto(LocationId: locationId, DepartmentId: id);
+        var result = await _departmentsService.DeleteRelation(deleteDepartmentRelationDto, cancellationToken);
         return Ok(result);
     }
 
@@ -63,8 +75,12 @@ public class DepartmentsController : ControllerBase
         [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
-        // Logic to retrieve a specific department by ID would go here
-        return NotFound();
+        var department = await _departmentsService.GetByIdAsync(id, cancellationToken);
+        if (department == null)
+        {
+            return NotFound();
+        }
+        return Ok(department);
     }
 
     [HttpDelete("{id::guid}")]
@@ -72,7 +88,11 @@ public class DepartmentsController : ControllerBase
         [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
-        // Logic to delete a specific department by ID would go here
+        var result = await _departmentsService.DeleteAsync(id, cancellationToken);
+        if (!result)
+        {
+            return NotFound();
+        }
         return Ok(new { Message = $"Department with ID {id} deleted" });
     }
 }

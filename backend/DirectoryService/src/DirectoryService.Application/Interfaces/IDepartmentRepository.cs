@@ -10,7 +10,13 @@ public interface IDepartmentRepository
 
     Task<bool> UpdateNameAsync(Guid departmentId, DepartmentName departmentName, CancellationToken cancellationToken);
 
-    Task<DepartmentPath?> GetByIdAsync(Guid departmentId, CancellationToken cancellationToken);
+    Task<DepartmentPath?> GetPathByIdAsync(Guid departmentId, CancellationToken cancellationToken);
+
+    Task<Department?> GetByIdAsync(Guid departmentId, CancellationToken cancellationToken);
+
+    Task<bool> DeleteAsync(Guid departmentId, CancellationToken cancellationToken);
+
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 
     Task<IReadOnlyCollection<Department>> GetAllAsync(CancellationToken cancellationToken);
 }

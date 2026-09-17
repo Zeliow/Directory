@@ -34,10 +34,29 @@ public class LocationsRepository : ILocationRepository
         return location.Id;
     }
 
+    public async Task<bool> DeleteAsync(Guid locationId, CancellationToken cancellationToken)
+    {
+        var location = await _dbContext.Set<Location>().FirstOrDefaultAsync(l => l.Id == locationId, cancellationToken);
+        if (location == null)
+        {
+            return false;
+        }
+
+        _dbContext.Remove(location);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
     public async Task<IReadOnlyCollection<Location>> GetAllAsync(CancellationToken cancellationToken)
     {
         var locations = await _dbContext.Set<Location>().ToListAsync(cancellationToken);
         return locations;
+    }
+
+    public async Task<Location?> GetByIdAsync(Guid locationId, CancellationToken cancellationToken)
+    {
+        var location = await _dbContext.Set<Location>().FirstOrDefaultAsync(l => l.Id == locationId, cancellationToken);
+        return location;
     }
 
     public async Task<bool> IsUniqueLocationNameAsync(LocationName locationName, CancellationToken cancellationToken)
