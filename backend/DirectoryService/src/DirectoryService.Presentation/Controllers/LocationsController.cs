@@ -53,7 +53,7 @@ public class LocationsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var result = await _locationsService.UpdateAsync(id, locationDto, cancellationToken);
-        if (result)
+        if (!result)
         {
             return BadRequest("Failed to update location.");
         }
@@ -70,7 +70,7 @@ public class LocationsController : ControllerBase
     {
         var result = await _locationsService.DeleteAsync(id, cancellationToken);
 
-        if (result)
+        if (!result)
         {
             return BadRequest("Failed to delete location.");
         }

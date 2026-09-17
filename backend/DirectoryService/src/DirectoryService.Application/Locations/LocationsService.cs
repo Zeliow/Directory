@@ -28,7 +28,7 @@ sealed public class LocationsService : ILocationsService
 
         var locationName = LocationName.Create(locationDto.LocationName);
 
-        var isUnique = await _locationRepository.IsUniqueLocationNameAsync(locationName, cancellationToken);
+        var isUnique = await _locationRepository.IsUniqueLocationNameAsync(Guid.Empty, locationName, cancellationToken);
 
         if (!isUnique) { _logger.LogError("Location with the same name already exists."); throw new InvalidOperationException("Location with the same name already exists"); }
 
@@ -48,7 +48,7 @@ sealed public class LocationsService : ILocationsService
     public async Task<bool> UpdateAsync(Guid locationId, UpdateLocationDto locationDto, CancellationToken cancellationToken)
     {
         var locationName = LocationName.Create(locationDto.LocationName);
-        var isUnique = await _locationRepository.IsUniqueLocationNameAsync(locationName, cancellationToken);
+        var isUnique = await _locationRepository.IsUniqueLocationNameAsync(locationId, locationName, cancellationToken);
         if (!isUnique) { _logger.LogError("Location with the same name already exists."); throw new InvalidOperationException("Location with the same name already exists"); }
 
         var locationAddress = Address.Create(

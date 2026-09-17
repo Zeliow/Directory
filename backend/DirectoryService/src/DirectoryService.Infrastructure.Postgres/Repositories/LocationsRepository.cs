@@ -59,9 +59,9 @@ public class LocationsRepository : ILocationRepository
         return location;
     }
 
-    public async Task<bool> IsUniqueLocationNameAsync(LocationName locationName, CancellationToken cancellationToken)
+    public async Task<bool> IsUniqueLocationNameAsync(Guid locationId, LocationName locationName, CancellationToken cancellationToken)
     {
-        var existingLocation = await _dbContext.Set<Location>().AnyAsync(l => l.Name == locationName, cancellationToken);
+        var existingLocation = await _dbContext.Set<Location>().AnyAsync(l => l.Name == locationName && l.Id != locationId, cancellationToken);
         _logger.LogInformation("Checking uniqueness of location name: {LocationName}, IsUnique: {IsUnique}", locationName, !existingLocation);
         return !existingLocation;
     }
@@ -85,7 +85,7 @@ public class LocationsRepository : ILocationRepository
         }
 
         location.UpdateData(locationName, address);
-
+        await _dbContext.SaveChangesAsync(cancellationToken);
         return true;
     }
 }

@@ -8,7 +8,7 @@ public interface ILocationRepository
 {
     Task<Guid> AddAsync(Location location, CancellationToken cancellationToken);
 
-    Task<bool> IsUniqueLocationNameAsync(LocationName locationName, CancellationToken cancellationToken);
+    Task<bool> IsUniqueLocationNameAsync(Guid locationId, LocationName locationName, CancellationToken cancellationToken);
 
     Task<bool> UpdateDataAsync(Guid locationId, Address address, LocationName locationName, CancellationToken cancellationToken);
 

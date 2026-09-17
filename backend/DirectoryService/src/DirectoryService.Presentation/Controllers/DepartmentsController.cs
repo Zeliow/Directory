@@ -56,7 +56,14 @@ public class DepartmentsController : ControllerBase
     {
         var createDepartmentRelationDto = new CreateDepartmentRelationDto(LocationId: locationId, DepartmentId: id);
         var result = await _departmentsService.CreateRelation(createDepartmentRelationDto, cancellationToken);
-        return Ok(result);
+        if (result)
+        {
+            return NotFound("Relation already exists.");
+        }
+        else
+        {
+            return Ok("Relation of department {id} created.");
+        }
     }
 
     [HttpDelete("{id::guid}/locations/{locationId::guid}")]
@@ -67,7 +74,14 @@ public class DepartmentsController : ControllerBase
     {
         var deleteDepartmentRelationDto = new DeleteDepartmentRelationDto(LocationId: locationId, DepartmentId: id);
         var result = await _departmentsService.DeleteRelation(deleteDepartmentRelationDto, cancellationToken);
-        return Ok(result);
+        if (result)
+        {
+            return NotFound("Relation not found.");
+        }
+        else
+        {
+            return Ok($"Relation of department {id} deleted.");
+        }
     }
 
     [HttpGet("{id::guid}")]
