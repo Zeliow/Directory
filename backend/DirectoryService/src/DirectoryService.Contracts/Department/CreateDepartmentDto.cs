@@ -1,3 +1,3 @@
 ﻿namespace DirectoryService.Contracts.Department;
 
-sealed public record CreateDepartmentDto(string Name, string Path, Guid ParentId, string Slug);
+sealed public record CreateDepartmentDto(string Name, Guid? ParentId, string Slug, IEnumerable<Guid> LocationIds);

@@ -32,4 +32,14 @@ public class LocationsRepository : ILocationRepository
         _logger.LogInformation("Checking uniqueness of location name: {LocationName}, IsUnique: {IsUnique}", locationName, !existingLocation);
         return !existingLocation;
     }
+
+    public async Task<bool> IsValidLocationsAsync(IEnumerable<Guid> locationIds, CancellationToken cancellationToken)
+    {
+        var distinctIds = locationIds.Distinct().ToList();
+
+        var existingCount = await _dbContext.Set<Location>()
+            .CountAsync(l => distinctIds.Contains(l.Id), cancellationToken);
+
+        return existingCount == distinctIds.Count;
+    }
 }

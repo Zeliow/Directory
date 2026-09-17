@@ -11,6 +11,12 @@ public sealed record DepartmentPath
     {
         Value = value;
     }
+
+    public static DepartmentPath CreateFromDatabase(string path)
+    {
+        return new DepartmentPath(path);
+    }
+
     public static DepartmentPath Create(string slug, string? parentPath = null)
     {
         if (parentPath == null)
