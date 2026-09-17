@@ -1,4 +1,5 @@
 ﻿using DirectoryService.Application.Interfaces;
+using DirectoryService.Contracts.Location;
 using DirectoryService.Domain;
 using DirectoryService.Domain.LocationVO;
 using Microsoft.EntityFrameworkCore;
@@ -19,16 +20,48 @@ public class LocationsRepository : ILocationRepository
 
     public async Task<Guid> AddAsync(Location location, CancellationToken cancellationToken)
     {
-        await _dbContext.AddAsync(location, cancellationToken);
+        var locationExists = await _dbContext.Set<Location>().AnyAsync(l => l.Id == location.Id, cancellationToken);
 
+        if (locationExists)
+        {
+            throw new InvalidOperationException("Location with the same ID already exists.");
+        }
+
+        await _dbContext.AddAsync(location, cancellationToken);
+        _logger.LogInformation("Location entity added to the database context: {LocationId}", location.Id);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return location.Id;
     }
 
-    public async Task<bool> IsUniqueLocationNameAsync(LocationName locationName, CancellationToken cancellationToken)
+    public async Task<bool> DeleteAsync(Guid locationId, CancellationToken cancellationToken)
     {
-        var existingLocation = await _dbContext.Set<Location>().AnyAsync(l => l.Name == locationName, cancellationToken);
+        var location = await _dbContext.Set<Location>().FirstOrDefaultAsync(l => l.Id == locationId, cancellationToken);
+        if (location == null)
+        {
+            return false;
+        }
+
+        _dbContext.Remove(location);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return true;
+    }
+
+    public async Task<IReadOnlyCollection<Location>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        var locations = await _dbContext.Set<Location>().ToListAsync(cancellationToken);
+        return locations;
+    }
+
+    public async Task<Location?> GetByIdAsync(Guid locationId, CancellationToken cancellationToken)
+    {
+        var location = await _dbContext.Set<Location>().FirstOrDefaultAsync(l => l.Id == locationId, cancellationToken);
+        return location;
+    }
+
+    public async Task<bool> IsUniqueLocationNameAsync(Guid locationId, LocationName locationName, CancellationToken cancellationToken)
+    {
+        var existingLocation = await _dbContext.Set<Location>().AnyAsync(l => l.Name == locationName && l.Id != locationId, cancellationToken);
         _logger.LogInformation("Checking uniqueness of location name: {LocationName}, IsUnique: {IsUnique}", locationName, !existingLocation);
         return !existingLocation;
     }
@@ -41,5 +74,18 @@ public class LocationsRepository : ILocationRepository
             .CountAsync(l => distinctIds.Contains(l.Id), cancellationToken);
 
         return existingCount == distinctIds.Count;
+    }
+
+    public async Task<bool> UpdateDataAsync(Guid locationId, Address address, LocationName locationName, CancellationToken cancellationToken)
+    {
+        var location = _dbContext.Set<Location>().FirstOrDefault(l => l.Id == locationId);
+        if (location == null)
+        {
+            return false;
+        }
+
+        location.UpdateData(locationName, address);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        return true;
     }
 }
