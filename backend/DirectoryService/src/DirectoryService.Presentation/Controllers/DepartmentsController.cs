@@ -62,7 +62,7 @@ public class DepartmentsController : ControllerBase
         }
         else
         {
-            return Ok("Relation of department {id} created.");
+            return Ok($"Relation of department {id} created.");
         }
     }
 
