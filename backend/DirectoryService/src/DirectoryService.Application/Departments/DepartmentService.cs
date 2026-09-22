@@ -1,9 +1,11 @@
-﻿using DirectoryService.Application.Interfaces;
+﻿using DirectoryService.Application.Departments.Failure;
+using DirectoryService.Application.Interfaces;
 using DirectoryService.Contracts.Department;
 using DirectoryService.Domain;
 using DirectoryService.Domain.DepartmentVO;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using DirectoryService.Application.Helpers;
 
 namespace DirectoryService.Application.Departments;
 
@@ -29,7 +31,8 @@ public class DepartmentService : IDepartmentService
         if (!validationResult.IsValid)
         {
             _logger.LogError("Invalid department data provided.");
-            throw new ValidationException(validationResult.Errors);
+
+            throw new DepartmentValidationException(validationResult.ToErrors());
         }
 
         var departmentName = DepartmentName.Create(departmentDto.Name);
@@ -46,7 +49,9 @@ public class DepartmentService : IDepartmentService
         if (departmentPath == null && departmentDto.ParentId != null)
         {
             _logger.LogError("Parent department with id {ParentId} not found.", departmentDto.ParentId);
-            throw new ArgumentException($"Parent department with id {departmentDto.ParentId} not found.", nameof(departmentDto));
+
+            //новое исключение нашей реализации.
+            throw new DepartmentParentIsNotExistException();
         }
         var parentId = ParentId.Create(departmentDto.ParentId);
 

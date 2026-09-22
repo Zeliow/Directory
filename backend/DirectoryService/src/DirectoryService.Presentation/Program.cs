@@ -1,7 +1,6 @@
-using DirectoryService.Application.Interfaces;
 using DirectoryService.Infrastructure.Postgres;
-using DirectoryService.Infrastructure.Postgres.Repositories;
 using DirectoryService.Presentation;
+using DirectoryService.Presentation.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -21,6 +20,8 @@ builder.Services.AddHealthChecks()
 builder.Services.AddProgrammDependencies(); // Add application dependencies
 
 var app = builder.Build();
+
+app.UseExceptionMiddleware(); // Add exception handling middleware
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

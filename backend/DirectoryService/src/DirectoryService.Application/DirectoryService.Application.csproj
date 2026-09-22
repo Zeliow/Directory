@@ -3,9 +3,11 @@
   <ItemGroup>
     <ProjectReference Include="..\DirectoryService.Contracts\DirectoryService.Contracts.csproj" />
     <ProjectReference Include="..\DirectoryService.Domain\DirectoryService.Domain.csproj" />
+    <ProjectReference Include="..\DirectoryService.Shared\DirectoryService.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Locations\Failure\" />
     <Folder Include="Position\" />
   </ItemGroup>
 

@@ -1,4 +1,6 @@
-﻿using DirectoryService.Shared;
+﻿using DirectoryService.Application.Exceptions;
+using DirectoryService.Shared;
+using System.Text.Json;
 
 namespace DirectoryService.Presentation.Middlewares;
 
@@ -25,28 +27,26 @@ public class ExceptionMiddleware
         }
     }
 
-    //to do: refactor this methhod to use expeption on apllication layer and return the error code and message from the exception
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         _logger.LogError(exception, "An unhandled exception occurred.");
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = exception switch
+        (int code, Error[]? errors) = exception switch
         {
-            AppException appException => appException.Error.Type switch
-            {
-                ErrorType.VALIDATION => StatusCodes.Status400BadRequest,
-                ErrorType.NOT_FOUND => StatusCodes.Status404NotFound,
-                ErrorType.CONFLICT => StatusCodes.Status409Conflict,
-                ErrorType.FAILURE => StatusCodes.Status500InternalServerError,
-                _ => StatusCodes.Status500InternalServerError
-            },
-            _ => StatusCodes.Status500InternalServerError
+            BadRequestException => (StatusCodes.Status500InternalServerError, JsonSerializer.Deserialize<Error[]>(exception.Message)),
+            NotFoundException => (StatusCodes.Status404NotFound, JsonSerializer.Deserialize<Error[]>(exception.Message)),
+            _ => (StatusCodes.Status510NotExtended, new Error[] { Error.Failure("internal.server.error", "An internal server error occurred.") })
         };
-        var errorResponse = new
-        {
-            Code = (exception as AppException)?.Error.Code ?? "internal.server.error",
-            Message = exception.Message
-        };
-        await context.Response.WriteAsJsonAsync(errorResponse);
+
+        context.Response.StatusCode = code;
+        await context.Response.WriteAsJsonAsync(errors);
+    }
+}
+
+public static class ExceptionMiddlewareExtension
+{
+    public static IApplicationBuilder UseExceptionMiddleware(this WebApplication app)
+    {
+        return app.UseMiddleware<ExceptionMiddleware>();
     }
 }

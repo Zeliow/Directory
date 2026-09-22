@@ -1,11 +1,15 @@
-﻿namespace DirectoryService.Shared;
+﻿using System.Text.Json.Serialization;
+
+namespace DirectoryService.Shared;
 
 public sealed record Error
 {
     public string Code { get; }
     public string Message { get; }
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public ErrorType Type { get; }
 
+    [JsonConstructor]
     private Error(string code, string message, ErrorType type)
     {
         Code = code;
@@ -21,8 +25,23 @@ public sealed record Error
 
 public enum ErrorType
 {
+    /// <summary>
+    /// Error type for validation errors, such as invalid input or missing required fields.
+    /// </summary>
     VALIDATION,
+
+    /// <summary>
+    /// Error type for not found errors, indicating that a requested resource could not be found.
+    /// </summary>
     NOT_FOUND,
+
+    /// <summary>
+    /// Error type for conflict errors, indicating that a requested operation could not be completed due to a conflict with the current state of the resource.
+    /// </summary>
     CONFLICT,
+
+    /// <summary>
+    /// Error type for general failure errors, indicating that an operation could not be completed due to an unexpected error or exception.
+    /// </summary>
     FAILURE,
 }
