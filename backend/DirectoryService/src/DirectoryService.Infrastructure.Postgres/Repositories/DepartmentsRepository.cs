@@ -1,4 +1,5 @@
-﻿using DirectoryService.Application.Interfaces;
+﻿using DirectoryService.Application.Departments.Failure;
+using DirectoryService.Application.Interfaces;
 using DirectoryService.Domain;
 using DirectoryService.Domain.DepartmentVO;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +57,7 @@ public class DepartmentsRepository : IDepartmentRepository
         var department = await _dbContext.Set<Department>().FirstOrDefaultAsync(d => d.Id == departmentId, cancellationToken);
         if (department == null)
         {
-            throw new ArgumentException($"Department with id {departmentId} not found.", nameof(departmentId));
+            throw new DepartmentNotExistException(departmentId);
         }
         return department;
     }

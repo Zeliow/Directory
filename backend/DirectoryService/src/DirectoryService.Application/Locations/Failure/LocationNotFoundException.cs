@@ -6,12 +6,12 @@ namespace DirectoryService.Application.Locations.Failure;
 public sealed class LocationNotFoundException : NotFoundException
 {
     public LocationNotFoundException(Guid id)
-        : base([Error.NotFound("location.not.found", $"Location with ID {id} not found.")])
+        : base([Error.NotFound("location.not.found", $"Локация с ID {id} не найдена.")])
     {
     }
 
     public LocationNotFoundException(IEnumerable<Guid> ids)
-        : base([Error.NotFound("location.not.found", $"Locations not found: {string.Join(", ", ids)}")])
+        : base([Error.NotFound("location.not.found", $"Локации не найдены: {string.Join(", ", ids)}")])
     {
     }
 }

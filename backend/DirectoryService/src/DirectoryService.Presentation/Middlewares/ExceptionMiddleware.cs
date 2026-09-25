@@ -27,7 +27,7 @@ public sealed class ExceptionMiddleware
         catch (Exception exception)
         {
             _logger.LogError(exception, "An unhandled exception occurred.");
-            await WriteErrorsAsync(context, [Error.Failure("internal.server.error", "An internal server error occurred.")]);
+            await WriteErrorsAsync(context, [Error.Failure("internal.server.error", "Внутренняя ошибка сервера.")]);
         }
     }
 
@@ -40,7 +40,7 @@ public sealed class ExceptionMiddleware
 
         IReadOnlyCollection<Error> errorList = errors.Count > 0
             ? errors
-            : [Error.Failure("internal.server.error", "An internal server error occurred.")];
+            : [Error.Failure("internal.server.error", "Внутренняя ошибка сервера.")];
 
         var errorTypes = errorList.Select(error => error.Type).Distinct().ToList();
         context.Response.StatusCode = errorTypes.Count == 1

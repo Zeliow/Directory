@@ -6,7 +6,7 @@ namespace DirectoryService.Application.Departments.Failure;
 public sealed class DepartmentLocationAlreadyExistsException : AppException
 {
     public DepartmentLocationAlreadyExistsException(Guid locationId)
-        : base(Error.Conflict("department.location.already.exists", $"Location {locationId} is already linked to the department."))
+        : base(Error.Conflict("department.location.already.exists", $"Локация {locationId} уже привязана к отделу."))
     {
     }
 }
@@ -14,7 +14,7 @@ public sealed class DepartmentLocationAlreadyExistsException : AppException
 public sealed class DepartmentLocationNotExistsException : NotFoundException
 {
     public DepartmentLocationNotExistsException(Guid locationId)
-        : base([Error.NotFound("department.location.not.found", $"Location {locationId} is not linked to the department.")])
+        : base([Error.NotFound("department.location.not.found", $"Локация {locationId} не привязана к отделу.")])
     {
     }
 }

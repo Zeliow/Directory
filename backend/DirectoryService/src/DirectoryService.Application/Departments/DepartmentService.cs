@@ -119,6 +119,12 @@ public class DepartmentService : IDepartmentService
             throw new DepartmentNotExistException(departmentRelationDto.DepartmentId);
         }
 
+        var location = await _locationRepository.GetByIdAsync(departmentRelationDto.LocationId, cancellationToken);
+        if (location == null)
+        {
+            throw new LocationNotFoundException(departmentRelationDto.LocationId);
+        }
+
         var added = department.AddLocation(departmentRelationDto.LocationId);
         if (!added)
         {
