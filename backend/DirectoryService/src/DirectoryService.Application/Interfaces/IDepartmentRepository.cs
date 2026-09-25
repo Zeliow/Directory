@@ -8,7 +8,7 @@ public interface IDepartmentRepository
 {
     Task AddAsync(Department department, CancellationToken cancellationToken);
 
-    Task<bool> UpdateNameAsync(Guid departmentId, DepartmentName departmentName, CancellationToken cancellationToken);
+    Task<Department> UpdateNameAsync(Guid departmentId, CancellationToken cancellationToken);
 
     Task<DepartmentPath?> GetPathByIdAsync(Guid departmentId, CancellationToken cancellationToken);
 

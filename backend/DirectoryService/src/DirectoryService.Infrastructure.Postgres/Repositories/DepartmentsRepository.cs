@@ -1,5 +1,5 @@
-﻿using DirectoryService.Application.Interfaces;
-using DirectoryService.Contracts.Department;
+﻿using DirectoryService.Application.Departments.Failure;
+using DirectoryService.Application.Interfaces;
 using DirectoryService.Domain;
 using DirectoryService.Domain.DepartmentVO;
 using Microsoft.EntityFrameworkCore;
@@ -52,17 +52,14 @@ public class DepartmentsRepository : IDepartmentRepository
         return departments;
     }
 
-    public async Task<bool> UpdateNameAsync(Guid departmentId, DepartmentName departmentName, CancellationToken cancellationToken)
+    public async Task<Department> UpdateNameAsync(Guid departmentId, CancellationToken cancellationToken)
     {
         var department = await _dbContext.Set<Department>().FirstOrDefaultAsync(d => d.Id == departmentId, cancellationToken);
         if (department == null)
         {
-            return false;
+            throw new DepartmentNotExistException(departmentId);
         }
-
-        department.UpdateDepartmentName(departmentName);
-        await _dbContext.SaveChangesAsync(cancellationToken);
-        return true;
+        return department;
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken)

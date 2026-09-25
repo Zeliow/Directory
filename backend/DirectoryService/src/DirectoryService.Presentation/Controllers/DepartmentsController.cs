@@ -55,15 +55,8 @@ public class DepartmentsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var createDepartmentRelationDto = new CreateDepartmentRelationDto(LocationId: locationId, DepartmentId: id);
-        var result = await _departmentsService.CreateRelation(createDepartmentRelationDto, cancellationToken);
-        if (!result)
-        {
-            return Conflict("Relation already exists.");
-        }
-        else
-        {
-            return Ok($"Relation of department {id} created.");
-        }
+        await _departmentsService.CreateRelation(createDepartmentRelationDto, cancellationToken);
+        return Ok($"Relation of department {id} created.");
     }
 
     [HttpDelete("{id::guid}/locations/{locationId::guid}")]
@@ -73,15 +66,8 @@ public class DepartmentsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var deleteDepartmentRelationDto = new DeleteDepartmentRelationDto(LocationId: locationId, DepartmentId: id);
-        var result = await _departmentsService.DeleteRelation(deleteDepartmentRelationDto, cancellationToken);
-        if (!result)
-        {
-            return Conflict("Relation not found.");
-        }
-        else
-        {
-            return Ok($"Relation of department {id} deleted.");
-        }
+        await _departmentsService.DeleteRelation(deleteDepartmentRelationDto, cancellationToken);
+        return Ok($"Relation of department {id} deleted.");
     }
 
     [HttpGet("{id::guid}")]

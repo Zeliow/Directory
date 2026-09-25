@@ -48,9 +48,14 @@ dotnet_diagnostic.S6673.severity = error  # Serilog template placeholder order
 dotnet_diagnostic.S108.severity  = error  # Пустой catch-блок без комментария
 
 dotnet_diagnostic.CS4014.severity = none
+dotnet_diagnostic.CA1031.severity = none
 dotnet_diagnostic.MA0042.severity = none
 dotnet_diagnostic.S6966.severity = none
 dotnet_diagnostic.MA0009.severity = none
 dotnet_diagnostic.CA1515.severity = none
 dotnet_diagnostic.CA1848.severity = none
 dotnet_diagnostic.CA1873.severity = none
+dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.CA1716.severity = none
+dotnet_diagnostic.CA1032.severity = none
+dotnet_diagnostic.RCS1194.severity = none
