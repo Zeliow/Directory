@@ -1,11 +1,10 @@
 ﻿using DirectoryService.Shared;
-using System.Text.Json;
 
 namespace DirectoryService.Application.Exceptions;
 
-public class BadRequestException : Exception
+public class BadRequestException : AppException
 {
-    protected BadRequestException(Error[] errors) : base(JsonSerializer.Serialize(errors))
+    public BadRequestException(Error[] errors) : base(errors)
     {
     }
 }

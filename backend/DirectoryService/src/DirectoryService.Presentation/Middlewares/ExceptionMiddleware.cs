@@ -1,10 +1,8 @@
-﻿using DirectoryService.Application.Exceptions;
-using DirectoryService.Shared;
-using System.Text.Json;
+﻿using DirectoryService.Shared;
 
 namespace DirectoryService.Presentation.Middlewares;
 
-public class ExceptionMiddleware
+public sealed class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<ExceptionMiddleware> _logger;
@@ -15,32 +13,51 @@ public class ExceptionMiddleware
         _logger = logger;
     }
 
-    public async Task InvokeAsync(HttpContext httpContext)
+    public async Task InvokeAsync(HttpContext context)
     {
         try
         {
-            await _next(httpContext);
+            await _next(context);
         }
-        catch (Exception ex)
+        catch (AppException exception)
         {
-            await HandleExceptionAsync(httpContext, ex);
+            _logger.LogWarning(exception, "Application error: {Code}", exception.Errors.FirstOrDefault()?.Code);
+            await WriteErrorsAsync(context, exception.Errors);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "An unhandled exception occurred.");
+            await WriteErrorsAsync(context, [Error.Failure("internal.server.error", "An internal server error occurred.")]);
         }
     }
 
-    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private static async Task WriteErrorsAsync(HttpContext context, IReadOnlyCollection<Error> errors)
     {
-        _logger.LogError(exception, "An unhandled exception occurred.");
-        context.Response.ContentType = "application/json";
-        (int code, Error[]? errors) = exception switch
+        if (context.Response.HasStarted)
         {
-            BadRequestException => (StatusCodes.Status500InternalServerError, JsonSerializer.Deserialize<Error[]>(exception.Message)),
-            NotFoundException => (StatusCodes.Status404NotFound, JsonSerializer.Deserialize<Error[]>(exception.Message)),
-            _ => (StatusCodes.Status510NotExtended, new Error[] { Error.Failure("internal.server.error", "An internal server error occurred.") })
-        };
+            return;
+        }
 
-        context.Response.StatusCode = code;
-        await context.Response.WriteAsJsonAsync(errors);
+        IReadOnlyCollection<Error> errorList = errors.Count > 0
+            ? errors
+            : [Error.Failure("internal.server.error", "An internal server error occurred.")];
+
+        var errorTypes = errorList.Select(error => error.Type).Distinct().ToList();
+        context.Response.StatusCode = errorTypes.Count == 1
+            ? MapStatusCode(errorTypes[0])
+            : StatusCodes.Status500InternalServerError;
+
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(errorList);
     }
+
+    private static int MapStatusCode(ErrorType type) => type switch
+    {
+        ErrorType.VALIDATION => StatusCodes.Status400BadRequest,
+        ErrorType.NOT_FOUND => StatusCodes.Status404NotFound,
+        ErrorType.CONFLICT => StatusCodes.Status409Conflict,
+        _ => StatusCodes.Status500InternalServerError,
+    };
 }
 
 public static class ExceptionMiddlewareExtension

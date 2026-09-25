@@ -19,7 +19,7 @@ public sealed record Error
 
     public static Error Validation(string? code, string message) => new(code ?? "value.invalid", message, ErrorType.VALIDATION);
     public static Error NotFound(string? code, string message) => new(code ?? "value.not.found", message, ErrorType.NOT_FOUND);
-    public static Error Confict(string? code, string message) => new(code ?? "value.is.conflict", message, ErrorType.CONFLICT);
+    public static Error Conflict(string? code, string message) => new(code ?? "value.is.conflict", message, ErrorType.CONFLICT);
     public static Error Failure(string? code, string message) => new(code ?? "value.failed", message, ErrorType.FAILURE);
 }
 

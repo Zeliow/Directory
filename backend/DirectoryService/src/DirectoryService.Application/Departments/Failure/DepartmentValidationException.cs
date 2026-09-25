@@ -3,7 +3,7 @@ using DirectoryService.Shared;
 
 namespace DirectoryService.Application.Departments.Failure;
 
-public class DepartmentValidationException : BadRequestException
+public sealed class DepartmentValidationException : BadRequestException
 {
     public DepartmentValidationException(Error[] errors) : base(errors)
     {

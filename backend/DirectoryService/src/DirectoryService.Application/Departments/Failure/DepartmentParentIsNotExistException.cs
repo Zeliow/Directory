@@ -3,9 +3,10 @@ using DirectoryService.Shared;
 
 namespace DirectoryService.Application.Departments.Failure;
 
-public class DepartmentParentIsNotExistException : BadRequestException
+public sealed class DepartmentParentIsNotExistException : NotFoundException
 {
-    public DepartmentParentIsNotExistException() : base([Errors.DepartmentErrors.ParentNotFound()])
+    public DepartmentParentIsNotExistException()
+        : base([Error.NotFound("department.parent.not.found", "Parent department not found.")])
     {
     }
 }

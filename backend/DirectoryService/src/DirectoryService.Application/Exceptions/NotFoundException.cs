@@ -1,11 +1,10 @@
 ﻿using DirectoryService.Shared;
-using System.Text.Json;
 
 namespace DirectoryService.Application.Exceptions;
 
-public class NotFoundException : Exception
+public class NotFoundException : AppException
 {
-    protected NotFoundException(Error[] errors) : base(JsonSerializer.Serialize(errors))
+    public NotFoundException(Error[] errors) : base(errors)
     {
     }
 }
