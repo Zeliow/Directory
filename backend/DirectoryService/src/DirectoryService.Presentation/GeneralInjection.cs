@@ -1,5 +1,4 @@
 ﻿using DirectoryService.Application;
-using DirectoryService.Infrastructure.Postgres;
 
 namespace DirectoryService.Presentation;
 

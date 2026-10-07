@@ -1,12 +1,11 @@
-﻿using DirectoryService.Application.Interfaces;
-using DirectoryService.Contracts.Department;
+﻿using DirectoryService.Contracts.Department;
 using FluentValidation;
 
 namespace DirectoryService.Application.Validators;
 
 public class CreateDepartmentValidator : AbstractValidator<CreateDepartmentDto>
 {
-    public CreateDepartmentValidator(ILocationRepository locationRepository)
+    public CreateDepartmentValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Недопустимо пустое значение имени отдела")
@@ -19,8 +18,6 @@ public class CreateDepartmentValidator : AbstractValidator<CreateDepartmentDto>
             .MinimumLength(4);
 
         RuleFor(x => x.LocationIds)
-            .NotEmpty()
-            .MustAsync(locationRepository.IsValidLocationsAsync)
-            .WithMessage("Одна или несколько указанных локаций не существуют.");
+            .NotEmpty().WithMessage("Требуется хотя бы одна локация");
     }
 }

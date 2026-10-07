@@ -1,4 +1,7 @@
-﻿using DirectoryService.Application.Interfaces;
+﻿using DirectoryService.Application.Exceptions;
+using DirectoryService.Application.Helpers;
+using DirectoryService.Application.Interfaces;
+using DirectoryService.Application.Locations.Failure;
 using DirectoryService.Contracts.Location;
 using DirectoryService.Domain;
 using DirectoryService.Domain.LocationVO;
@@ -24,13 +27,21 @@ sealed public class LocationsService : ILocationsService
     {
         var validationResult = await _createLocationValidator.ValidateAsync(locationDto, cancellationToken);
 
-        if (!validationResult.IsValid) { _logger.LogError("Invalid location data provided."); throw new ValidationException(validationResult.Errors); }
+        if (!validationResult.IsValid)
+        {
+            _logger.LogError("Invalid location data provided.");
+            throw new BadRequestException(validationResult.ToErrors());
+        }
 
         var locationName = LocationName.Create(locationDto.LocationName);
 
         var isUnique = await _locationRepository.IsUniqueLocationNameAsync(Guid.Empty, locationName, cancellationToken);
 
-        if (!isUnique) { _logger.LogError("Location with the same name already exists."); throw new InvalidOperationException("Location with the same name already exists"); }
+        if (!isUnique)
+        {
+            _logger.LogError("Location with the same name already exists.");
+            throw new LocationNameDuplicateException(locationName.Value);
+        }
 
         var locationAddress = Address.Create(
             locationDto.AddressDto.Country,
@@ -49,7 +60,11 @@ sealed public class LocationsService : ILocationsService
     {
         var locationName = LocationName.Create(locationDto.LocationName);
         var isUnique = await _locationRepository.IsUniqueLocationNameAsync(locationId, locationName, cancellationToken);
-        if (!isUnique) { _logger.LogError("Location with the same name already exists."); throw new InvalidOperationException("Location with the same name already exists"); }
+        if (!isUnique)
+        {
+            _logger.LogError("Location with the same name already exists.");
+            throw new LocationNameDuplicateException(locationName.Value);
+        }
 
         var locationAddress = Address.Create(
             locationDto.AddressDto.Country,
@@ -69,7 +84,11 @@ sealed public class LocationsService : ILocationsService
     public async Task<Location> GetByidAsync(Guid locationId, CancellationToken cancellationToken)
     {
         var location = await _locationRepository.GetByIdAsync(locationId, cancellationToken);
-        if (location == null) { _logger.LogError("Location with id {LocationId} not found.", locationId); throw new ArgumentException($"Location with id {locationId} not found.", nameof(locationId)); }
+        if (location == null)
+        {
+            _logger.LogError("Location with id {LocationId} not found.", locationId);
+            throw new LocationNotFoundException(locationId);
+        }
         return location;
     }
 

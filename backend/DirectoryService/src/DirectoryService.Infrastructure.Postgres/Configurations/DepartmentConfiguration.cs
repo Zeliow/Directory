@@ -1,6 +1,5 @@
 ﻿using DirectoryService.Domain;
 using DirectoryService.Domain.DepartmentVO;
-using DirectoryService.Domain.LocationVO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
