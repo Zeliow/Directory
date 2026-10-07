@@ -52,7 +52,7 @@ public class DepartmentsRepository : IDepartmentRepository
         return departments;
     }
 
-    public async Task<Department> UpdateNameAsync(Guid departmentId, CancellationToken cancellationToken)
+    public async Task<Department> GetForUpdateNameOfDeparmentAsync(Guid departmentId, CancellationToken cancellationToken)
     {
         var department = await _dbContext.Set<Department>().FirstOrDefaultAsync(d => d.Id == departmentId, cancellationToken);
         if (department == null)

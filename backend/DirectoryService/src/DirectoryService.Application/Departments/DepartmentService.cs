@@ -78,10 +78,10 @@ public class DepartmentService : IDepartmentService
     public async Task<bool> UpdateAsync(Guid departmentId, UpdateDepartmentDto departmentDto, CancellationToken cancellationToken)
     {
         var departmentName = DepartmentName.Create(departmentDto.DepartmentName);
-        var department = await _departmentRepository.UpdateNameAsync(departmentId, cancellationToken);
+        var department = await _departmentRepository.GetForUpdateNameOfDeparmentAsync(departmentId, cancellationToken);
         department.UpdateDepartmentName(departmentName);
         await _departmentRepository.SaveChangesAsync(cancellationToken);
-        _logger.LogInformation("Updating department with id {DepartmentName}", departmentDto.DepartmentName);
+        _logger.LogInformation("Updating department with id {DepartmentId}", departmentId);
 
         return true;
     }
